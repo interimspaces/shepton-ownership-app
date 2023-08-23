@@ -29,7 +29,7 @@ body, html {
     width: 100%; /* Match the width of the parent container */
     height: auto; /* Maintain aspect ratio */
     top: 2px; /* Align to the top */
-    left: 3px; /* Align to the left */
+    left: 2px; /* Align to the left */
     z-index: 1; /* Ensure it appears above the background */
 }
 
@@ -49,9 +49,10 @@ body, html {
 }
 
 .building-object {
-    fill: #808080; /* Middle grey */
+    fill: #b0b0b0; /* Slightly lighter grey */
 }
 
 .building-object:hover {
-    filter: drop-shadow(0px 5px 5px rgba(0,0,0,0.5)); /* Shadow on hover */
+    stroke: #ff6600; /* Bright orange outline */
+    stroke-width: 3; /* 3px stroke width */
 }
