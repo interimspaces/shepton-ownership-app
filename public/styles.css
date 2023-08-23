@@ -28,9 +28,21 @@ body, html {
     position: absolute;
     width: 100%; /* Match the width of the parent container */
     height: auto; /* Maintain aspect ratio */
-    top: 1px; /* Align to the top with 1px offset */
-    left: 2px; /* Align to the left with 2px offset */
+    top: 1px; /* Align to the top with a slight offset */
+    left: 2px; /* Align to the left with a slight offset */
     z-index: 1; /* Ensure it appears above the background */
+}
+
+.building-objects polygon {
+    fill: #999999; /* Light grey */
+    transition: filter 0.3s ease; /* Smooth transition for the shadow */
+}
+
+.building-objects polygon:hover {
+    fill: #ff6600; /* Orange fill color */
+    stroke: #ff6600; /* Orange stroke color */
+    stroke-width: 6px; /* Stroke width */
+    filter: drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.5)); /* Shadow effect */
 }
 
 #timeline {
@@ -46,13 +58,4 @@ body, html {
 
 .summary-box {
     padding: 20px;
-}
-
-.building-object {
-    fill: #808080; /* Middle grey color */
-}
-
-.building-object:hover {
-    stroke: #ff6600; /* Bright orange outline */
-    stroke-width: 6; /* 6px stroke width */
 }
