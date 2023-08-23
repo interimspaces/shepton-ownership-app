@@ -24,27 +24,31 @@ def process_image(image_path):
     # Visualize the intermediate steps
     cv2.imshow('Thresholded', thresholded)
     cv2.imshow('Eroded and Dilated', dilated)
-    cv2.imshow('Original with Filled Contours', original_image)  # Display original with filled contours
+    cv2.imshow('Original with Filled Contours', original_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
     # Convert contours into objects
-    building_outlines = []
+    building_objects = []
     for contour in contours:
         outline = [point[0].tolist() for point in contour]
-        building_outlines.append(outline)
+        area = cv2.contourArea(contour)
+        x, y, w, h = cv2.boundingRect(contour)
+        bounding_box = {'x': x, 'y': y, 'width': w, 'height': h}
+        building_object = {'coordinates': outline, 'area': area, 'bounding_box': bounding_box, 'filled': True}
+        building_objects.append(building_object)
 
     # Serialize objects into JSON
-    json_data = json.dumps(building_outlines)
+    json_data = json.dumps(building_objects)
 
     # Save JSON to a file
-    with open('building-outlines.json', 'w') as file:  # Changed file name as requested
-        json.dump(building_outlines, file)
+    with open('building-objects.json', 'w') as file:
+        json.dump(building_objects, file)
 
-    print(f'Processed {len(building_outlines)} buildings and saved to building-outlines.json.')  # Changed file name in message
+    print(f'Processed {len(building_objects)} buildings and saved to building-objects.json.')
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Process a PNG map to detect building outlines.')
+    parser = argparse.ArgumentParser(description='Process a PNG map to detect building objects.')
     parser.add_argument('image_path', type=str, help='Path to the PNG image file.')
 
     args = parser.parse_args()
