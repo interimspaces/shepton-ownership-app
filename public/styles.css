@@ -47,3 +47,7 @@ body, html {
 .summary-box {
     padding: 20px;
 }
+
+.building-object:hover {
+    fill: #ff0000; /* Change to the desired hover color */
+}
