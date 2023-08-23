@@ -1,12 +1,13 @@
 window.addEventListener('DOMContentLoaded', async () => {
     const mapContainer = document.querySelector('.map-container');
     const img = document.createElement('img');
-   // img.src = 'images/shepton-background-map.png';
+    img.src = 'images/shepton-background-map.png'; // Re-include the map image src
     img.alt = 'Map';
     mapContainer.appendChild(img);
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.id = 'buildings';
+    svg.setAttribute('viewBox', '0 0 800 600'); // Set viewBox based on your map's dimensions
     mapContainer.appendChild(svg);
 
     const response = await fetch('/data/building-outlines.json');
@@ -14,8 +15,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     buildingOutlines.forEach((building) => {
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', convertToPath(building.coordinates));
-        path.setAttribute('fill', 'neutralgray');
+        path.setAttribute('d', convertToPath(building)); // No need for .coordinates
+        path.setAttribute('fill', 'neutralgray'); // You can replace 'neutralgray' with an actual color code
         path.addEventListener('click', (e) => {
             handleBuildingClick(building, e);
         });
