@@ -26,3 +26,30 @@ window.addEventListener('DOMContentLoaded', async () => {
     // Append the SVG to the building objects container
     mapContainer.appendChild(svgElement);
 });
+
+// modal window for building mouseover
+svgElement.querySelectorAll('polygon').forEach((path) => {
+    path.addEventListener('mouseover', (e) => {
+        e.target.style.fill = '#ff6600';
+
+        // Get the modal element
+        const modal = document.getElementById('buildingModal');
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Set the position based on the cursor
+        modal.style.left = e.clientX + 'px';
+        modal.style.top = e.clientY + 'px';
+
+        // Set the address (this will be dynamic later)
+        document.getElementById('buildingAddress').innerText = 'Address here';
+    });
+
+    path.addEventListener('mouseout', (e) => {
+        e.target.style.fill = '#999999';
+
+        // Hide the modal
+        document.getElementById('buildingModal').style.display = 'none';
+    });
+});

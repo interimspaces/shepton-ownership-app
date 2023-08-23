@@ -59,3 +59,14 @@ body, html {
 .summary-box {
     padding: 20px;
 }
+
+.building-modal {
+    display: none; /* Hide by default */
+    position: absolute;
+    z-index: 2; /* Above the SVG */
+    background-color: #ffffff; /* Background color */
+    border: 1px solid #999999; /* Border */
+    padding: 10px; /* Padding */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); /* Shadow effect */
+    pointer-events: none; /* Prevents the modal from interfering with hover effects on the SVG */
+}
