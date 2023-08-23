@@ -5,6 +5,7 @@ import argparse
 def process_image(image_path):
     # Load the PNG map
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    original_image = cv2.imread(image_path)  # Load original image to draw on
 
     # Apply adaptive thresholding
     thresholded = cv2.adaptiveThreshold(image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 11, 2)
@@ -17,9 +18,13 @@ def process_image(image_path):
     # Find contours (outlines)
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+    # Fill the contours on the original image (using -1 for thickness fills the contour)
+    cv2.drawContours(original_image, contours, -1, (0, 255, 0), -1)
+
     # Visualize the intermediate steps
     cv2.imshow('Thresholded', thresholded)
     cv2.imshow('Eroded and Dilated', dilated)
+    cv2.imshow('Original with Filled Contours', original_image)  # Display original with filled contours
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
@@ -33,10 +38,10 @@ def process_image(image_path):
     json_data = json.dumps(building_outlines)
 
     # Save JSON to a file
-    with open('building_outlines.json', 'w') as file:
+    with open('building-outlines.json', 'w') as file:  # Changed file name as requested
         json.dump(building_outlines, file)
 
-    print(f'Processed {len(building_outlines)} buildings and saved to building_outlines.json.')
+    print(f'Processed {len(building_outlines)} buildings and saved to building-outlines.json.')  # Changed file name in message
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process a PNG map to detect building outlines.')
