@@ -10,16 +10,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     tempContainer.innerHTML = svgText;
     const svgElement = tempContainer.querySelector('svg');
 
-    // Add interactivity to the paths
+    // Add a class to the polygons
     svgElement.querySelectorAll('polygon').forEach((path) => {
-        path.addEventListener('mouseover', (e) => {
-            e.target.style.fill = '#ff0000';
-            e.target.style.filter = 'drop-shadow(3px 3px 2px rgba(0,0,0,0.3))';
-        });
-        path.addEventListener('mouseout', (e) => {
-            e.target.style.fill = '#808080';
-            e.target.style.filter = 'none';
-        });
+        path.classList.add('building-object');
     });
 
     // Append the SVG to the map container

@@ -24,14 +24,13 @@ body, html {
     z-index: 0; /* Ensure that it stays below the SVG */
 }
 
-.building-objects polygon {
-    fill: #808080; /* Middle grey */
-    transition: 0.3s; /* Smooth transition for hover effect */
-}
-
-.building-objects polygon:hover {
-    fill: #ff0000; /* Red on hover */
-    filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.3)); /* Shadow on hover */
+.building-objects {
+    position: absolute;
+    width: 100%; /* Match the width of the parent container */
+    height: auto; /* Maintain aspect ratio */
+    top: 0; /* Align to the top */
+    left: 10px; /* Align to the left */
+    z-index: 1; /* Ensure it appears above the background */
 }
 
 #timeline {
@@ -49,7 +48,11 @@ body, html {
     padding: 20px;
 }
 
-.building-objects {
-    left: 5px;
-    top:2px;
+.building-object {
+    fill: #808080; /* Middle grey */
+}
+
+.building-object:hover {
+    fill: #ff0000; /* Red on hover */
+    filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.3)); /* Shadow on hover */
 }
