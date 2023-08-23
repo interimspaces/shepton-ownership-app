@@ -1,8 +1,8 @@
 window.addEventListener('DOMContentLoaded', async () => {
-    const buildingObjectsContainer = document.querySelector('.building-objects');
+    const mapContainer = document.querySelector('.map-container');
 
-    // Fetch the SVG file (adjust the path as needed)
-    const response = await fetch('/images/buildings.svg');
+    // Fetch the SVG file
+    const response = await fetch('/data/buildings.svg');
     const svgText = await response.text();
 
     // Create a temporary container to parse the SVG
@@ -12,15 +12,15 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     // Add interactivity to the paths
     svgElement.querySelectorAll('polygon').forEach((path) => {
-        path.setAttribute('fill', 'gray'); // Adjust the color as needed
+        path.classList.add('building-object');
         path.addEventListener('mouseover', (e) => {
-            e.target.style.fill = '#ff0000';
+            e.target.style.filter = 'drop-shadow(3px 3px 3px black)'; // Adds a shadow
         });
         path.addEventListener('mouseout', (e) => {
-            e.target.style.fill = 'gray'; // Adjust the color as needed
+            e.target.style.filter = 'none'; // Removes the shadow
         });
     });
 
-    // Append the SVG to the building objects container
-    buildingObjectsContainer.appendChild(svgElement);
+    // Append the SVG to the map container
+    mapContainer.appendChild(svgElement);
 });
