@@ -37,7 +37,7 @@ body, html {
     position: absolute; /* Absolute positioning */
     top: 0; /* Adjust as needed */
     left: 0; /* Adjust as needed */
-    bottom: 100pt; /* Adjust as needed */
+    bottom: 200px; /* Adjust as needed */
     width: 100%; /* 100% of parent */
     height: auto;
     z-index: 1; /* Ensures it appears above the background */
