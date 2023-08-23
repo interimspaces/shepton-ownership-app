@@ -2,7 +2,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     const mapContainer = document.querySelector('.map-container');
 
     // Fetch the SVG file
-    const response = await fetch('/data/buildings.svg');
+    const response = await fetch('/images/buildings.svg');
     const svgText = await response.text();
 
     // Create a temporary container to parse the SVG
