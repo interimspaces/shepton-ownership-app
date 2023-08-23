@@ -24,15 +24,14 @@ body, html {
     z-index: 0; /* Ensure that it stays below the SVG */
 }
 
-.building-objects {
-    position: absolute;
-    fill: #808080; /* Middle grey color */
-    width: 100%; /* Match the width of the parent container */
-    height: auto; /* Maintain aspect ratio */
-    top: 0; /* Align to the top */
-    left: 0; /* Align to the left */
-    z-index: 1; /* Ensure it appears above the background */
+.building-objects polygon {
+    fill: #808080; /* Middle grey */
+    transition: 0.3s; /* Smooth transition for hover effect */
+}
 
+.building-objects polygon:hover {
+    fill: #ff0000; /* Red on hover */
+    filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.3)); /* Shadow on hover */
 }
 
 #timeline {
