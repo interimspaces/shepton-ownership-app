@@ -1,38 +1,38 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
 .layout {
     display: flex;
-    flex-direction: row;
     height: 100vh;
 }
 
 .map-container {
+    flex: 3;
     position: relative;
-    width: 75%;
-    height: 100%;
+    background-image: url('images/shepton-background-map.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-.background-map {
-    width: 100%;
-    height: auto;
+#timeline {
     position: absolute;
-    left: 0;
-    top: 0;
+    top: 10px;
+    left: 10px;
+}
+
+.sidebar {
+    flex: 1;
+    background-color: #f1f1f1;
+}
+
+.summary-box {
+    padding: 20px;
 }
 
 .building-objects {
     width: 100%;
     height: auto;
-    position: absolute;
-    left: 0;
-    top: 0;
 }
-
-.sidebar {
-    width: 25%;
-    height: 100%;
-}
-
-.summary-box {
-    /* Styles for the summary box */
-}
-
-#timeline {
