@@ -1,28 +1,36 @@
-// Load the building outlines from JSON
-fetch("../data/building-outlines.json")
-  .then((response) => response.json())
-  .then((buildings) => {
-    // Add buildings to the map
+window.addEventListener('DOMContentLoaded', async () => {
     const mapContainer = document.querySelector('.map-container');
-    buildings.forEach((building, index) => {
-      const buildingElement = document.createElement('div');
-      buildingElement.classList.add('building');
-      buildingElement.style.left = building.x + 'px';
-      buildingElement.style.top = building.y + 'px';
-      buildingElement.style.width = building.width + 'px';
-      buildingElement.style.height = building.height + 'px';
-      
-      // Event listener to handle building click
-      buildingElement.addEventListener('click', () => handleBuildingClick(building, index));
-      
-      mapContainer.appendChild(buildingElement);
-    });
-  })
-  .catch((error) => console.error("An error occurred while loading buildings:", error));
+    const img = document.createElement('img');
+    img.src = 'images/shepton-background-map.png';
+    img.alt = 'Map';
+    mapContainer.appendChild(img);
 
-// Function to handle building click
-function handleBuildingClick(building, index) {
-  // You can define what happens when a building is clicked
-  // For example, show building details, etc.
-  console.log("Building clicked:", building, index);
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.id = 'buildings';
+    mapContainer.appendChild(svg);
+
+    const response = await fetch('/data/building-outlines.json');
+    const buildingOutlines = await response.json();
+
+    buildingOutlines.forEach((building) => {
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', convertToPath(building.coordinates));
+        path.setAttribute('fill', 'neutralgray');
+        path.addEventListener('click', (e) => {
+            handleBuildingClick(building, e);
+        });
+        svg.appendChild(path);
+    });
+});
+
+function convertToPath(coordinates) {
+    const d = coordinates.map((coord, index) => {
+        const command = index === 0 ? 'M' : 'L';
+        return `${command} ${coord[0]} ${coord[1]}`;
+    }).join(' ');
+    return d + ' Z';
+}
+
+function handleBuildingClick(building, e) {
+    // Code to handle click event on building, e.g., show a modal to modify data
 }
