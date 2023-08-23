@@ -28,8 +28,8 @@ body, html {
     position: absolute;
     width: 100%; /* Match the width of the parent container */
     height: auto; /* Maintain aspect ratio */
-    top: 2px; /* Align to the top */
-    left: 2px; /* Align to the left */
+    top: 1px; /* Align to the top with 1px offset */
+    left: 2px; /* Align to the left with 2px offset */
     z-index: 1; /* Ensure it appears above the background */
 }
 
@@ -49,10 +49,10 @@ body, html {
 }
 
 .building-object {
-    fill: #b0b0b0; /* Slightly lighter grey */
+    fill: #808080; /* Middle grey color */
 }
 
 .building-object:hover {
     stroke: #ff6600; /* Bright orange outline */
-    stroke-width: 3; /* 3px stroke width */
+    stroke-width: 6; /* 6px stroke width */
 }
