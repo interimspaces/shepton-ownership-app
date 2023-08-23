@@ -13,8 +13,9 @@ body, html {
     position: relative;
     background-image: url('images/shepton-background-map.png');
     background-size: cover;
-    background-position: center;
+    background-position: center; /* Adjust this if needed */
     background-repeat: no-repeat;
+    overflow: hidden; /* Prevents the SVG from overflowing */
 }
 
 #timeline {
@@ -33,6 +34,10 @@ body, html {
 }
 
 .building-objects {
-    width: 100%;
+    position: absolute; /* Absolute positioning */
+    top: 0; /* Adjust as needed */
+    left: 0; /* Adjust as needed */
+    width: 100%; /* 100% of parent */
     height: auto;
+    z-index: 1; /* Ensures it appears above the background */
 }
