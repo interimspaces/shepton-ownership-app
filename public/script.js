@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', async () => {
     const mapContainer = document.querySelector('.map-container');
     const img = document.createElement('img');
-    img.src = 'images/shepton-background-map.png';
+   // img.src = 'images/shepton-background-map.png';
     img.alt = 'Map';
     mapContainer.appendChild(img);
 
