@@ -1,5 +1,5 @@
 // Load the building outlines from JSON
-fetch("../data/buildings-outlines.json")
+fetch("../data/building-outlines.json")
   .then((response) => response.json())
   .then((buildings) => {
     // Add buildings to the map
