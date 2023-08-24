@@ -29,7 +29,7 @@ body, html {
     width: 100%; /* Match the width of the parent container */
     height: auto; /* Maintain aspect ratio */
     top: 1px; /* Align to the top with a slight offset */
-    left: 2px; /* Align to the left with a slight offset */
+    left: 1px; /* Align to the left with a slight offset */
     z-index: 1; /* Ensure it appears above the background */
 }
 
