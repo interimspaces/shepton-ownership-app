@@ -54,3 +54,14 @@ body, html {
     left: 10px;
     z-index: 2; /* Ensure they are above the map and other elements */
 }
+
+.building-object {
+    fill: #999999; /* Set the fill color for the building objects */
+    transition: all 0.3s; /* For smooth transition */
+}
+
+.building-object:hover {
+    stroke: #ff6600; /* Outline color on hover */
+    stroke-width: 6px; /* Outline thickness on hover */
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); /* Long drop shadow on hover */
+}
