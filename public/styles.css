@@ -51,14 +51,13 @@ body, html {
 }
 
 .building-object {
-    fill: #999999; /* Standard grey color for SVG objects */
-    transition: all 0.3s; /* Smooth transition for hover effects */
+    fill: #999999; /* Standard color */
 }
 
 .building-object:hover {
-    stroke: #ff6600; /* Bright orange outline on hover */
-    stroke-width: 6px; /* Stroke width */
-    filter: drop-shadow(5px 10px 8px rgba(0,0,0,0.2)); /* Long drop shadow on hover */
+    stroke: #ff6600; /* Outline color on hover */
+    stroke-width: 6px; /* Outline width */
+    filter: drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.4)); /* Long drop shadow */
 }
 
 /* Styles for modal window */
