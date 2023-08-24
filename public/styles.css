@@ -14,25 +14,26 @@ body, html {
     overflow: hidden;
 }
 
-.background-map, .building-objects svg {
-    transition: transform 0.3s ease;
+.background-map, .building-objects {
     width: 100%;
     position: absolute;
     top: 0;
     left: 0;
+    transition: transform 0.3s ease; /* Smooth zoom transition */
 }
 
-.building-objects {
-    position: absolute;
-    top: 1px;
-    left: 2px;
-    z-index: 1;
+.zoom-controls {
+    position: fixed;
+    top: 40px;
+    left: 10px;
+    z-index: 3;
 }
 
 #timeline {
     position: absolute;
     top: 10px;
     left: 10px;
+    z-index: 3; /* To ensure it stays above the map and other elements */
 }
 
 .sidebar {
@@ -44,17 +45,9 @@ body, html {
     padding: 20px;
 }
 
-.zoom-controls {
-    position: fixed;
-    top: 40px;
-    left: 10px;
-    z-index: 3;
-}
-
 .building-object {
     fill: #999999;
     transition: all 0.3s;
-    stroke-width: 0px;
 }
 
 .building-object:hover {
