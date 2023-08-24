@@ -8,14 +8,12 @@ window.addEventListener('DOMContentLoaded', async () => {
     const zoomIn = () => {
         zoomLevel += 0.1;
         if (zoomLevel > 2) zoomLevel = 2;
-        zoomingArea.style.transformOrigin = '0 0';
         zoomingArea.style.transform = `scale(${zoomLevel})`;
     };
 
     const zoomOut = () => {
         zoomLevel -= 0.1;
         if (zoomLevel < 1) zoomLevel = 1;
-        zoomingArea.style.transformOrigin = '0 0';
         zoomingArea.style.transform = `scale(${zoomLevel})`;
     };
 
