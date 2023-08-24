@@ -48,6 +48,8 @@ body, html {
 .building-object {
     fill: #999999;
     transition: all 0.3s;
+    left: 1px;
+    top: 1px;
 }
 
 .building-object:hover {
