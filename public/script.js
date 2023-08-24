@@ -17,6 +17,12 @@ window.addEventListener('DOMContentLoaded', async () => {
         zoomingArea.style.transform = `scale(${zoomLevel})`;
     };
 
+    mapContainer.addEventListener('wheel', (e) => {
+        if (e.deltaY < 0) zoomIn();
+        else zoomOut();
+    });
+
+    let zoomInInterval, zoomOutInterval;
     zoomInButton.addEventListener('mousedown', () => {
         zoomInInterval = setInterval(zoomIn, 100);
     });
@@ -44,7 +50,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     // Add interactivity to the polygons
     svgElement.querySelectorAll('polygon').forEach((path) => {
-        path.classList.add('building-object'); // Adding the class
+        path.classList.add('building-object');
         path.addEventListener('mouseover', (e) => {
             e.target.style.stroke = '#ff6600';
             e.target.style.strokeWidth = '6px';
