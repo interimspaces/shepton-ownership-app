@@ -12,6 +12,8 @@ body, html {
     flex: 3;
     position: relative;
     overflow: hidden;
+    top: 1px;
+    left: 2px;
 }
 
 .background-map {
@@ -21,28 +23,16 @@ body, html {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 0; /* Ensure that it stays below the SVG */
+    z-index: 0;
 }
 
 .building-objects {
     position: absolute;
-    width: 100%; /* Match the width of the parent container */
-    height: auto; /* Maintain aspect ratio */
-    top: 1px; /* Align to the top with a slight offset */
-    left: 1px; /* Align to the left with a slight offset */
-    z-index: 1; /* Ensure it appears above the background */
-}
-
-.building-objects polygon {
-    fill: #999999; /* Light grey */
-    transition: filter 0.3s ease; /* Smooth transition for the shadow */
-}
-
-.building-objects polygon:hover {
-    fill: #ff6600; /* Orange fill color */
-    stroke: #ff6600; /* Orange stroke color */
-    stroke-width: 6px; /* Stroke width */
-    filter: drop-shadow(10px 10px 5px rgba(0, 0, 0, 0.5)); /* Shadow effect */
+    width: 100%;
+    height: auto;
+    top: 0;
+    left: 0;
+    z-index: 1;
 }
 
 #timeline {
@@ -60,26 +50,21 @@ body, html {
     padding: 20px;
 }
 
-.building-modal {
-    display: none; /* Hide by default */
-    position: absolute;
-    z-index: 2; /* Above the SVG */
-    background-color: #ffffff; /* Background color */
-    border: 1px solid #999999; /* Border */
-    padding: 10px; /* Padding */
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); /* Shadow effect */
-    pointer-events: none; /* Prevents the modal from interfering with hover effects on the SVG */
+.building-object {
+    fill: #999999; /* Standard grey color for SVG objects */
 }
 
-.zoom-controls {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 10; /* Ensure it appears above other elements */
+.building-object:hover {
+    stroke: #ff6600; /* Bright orange outline on hover */
+    stroke-width: 6px; /* Stroke width */
 }
 
-#zoomIn, #zoomOut {
-    font-size: 20px;
-    padding: 5px;
-    cursor: pointer;
+/* Styles for modal window */
+.modal {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #000;
+    padding: 10px;
+    z-index: 1000; /* Make sure it's above everything else */
 }
