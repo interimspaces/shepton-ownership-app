@@ -6,6 +6,7 @@ const app = express();
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// JSON middleware
 app.use(express.json());
 
 const pool = new Pool({
