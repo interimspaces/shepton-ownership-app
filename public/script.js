@@ -54,6 +54,7 @@ svgElement.querySelectorAll('polygon').forEach((path) => {
     });
 });
 
+
 // map zoom
 const zoomInButton = document.getElementById('zoomIn');
 const zoomOutButton = document.getElementById('zoomOut');
