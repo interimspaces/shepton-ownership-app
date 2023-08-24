@@ -20,23 +20,21 @@ body, html {
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;
-    left: 0;
-    transition: transform 0.5s;
+    top: 2px;
+    left: 1px;
+    cursor: grab;
 }
 
-.background-map {
-    width: 100%;
-    height: auto;
+.zooming-area:active {
+    cursor: grabbing;
+}
+
+.background-map, .building-objects {
     position: absolute;
-    top: 0;
-    left: 0;
-}
-
-.building-objects {
     width: 100%;
     height: 100%;
-    position: absolute;
+    top: 2px;
+    left: 1px;
 }
 
 .building-objects {
@@ -60,17 +58,12 @@ body, html {
 }
 
 .zoom-controls {
-    position: absolute; /* Changed from fixed to absolute */
+    position: absolute;
     bottom: 40px;
     right: 10px;
     z-index: 9999;
-    font-size: 24px; /* Increased font size for larger buttons */
-}
-
-button {
-    width: 40px; /* Width of the buttons */
-    height: 40px; /* Height of the buttons */
-    margin-bottom: 10px; /* Space between the buttons */
+    display: flex;
+    flex-direction: column;
 }
 
 .building-object {

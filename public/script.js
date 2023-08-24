@@ -4,6 +4,35 @@ window.addEventListener('DOMContentLoaded', async () => {
     const zoomOutButton = document.getElementById('zoomOut');
     const mapContainer = document.querySelector('.building-objects');
     let zoomLevel = 1;
+    let zoomInInterval, zoomOutInterval;
+
+    // Drag functionality
+    let isDragging = false;
+    let prevX, prevY;
+
+    zoomingArea.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        prevX = e.clientX;
+        prevY = e.clientY;
+    });
+
+    zoomingArea.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - prevX;
+        const dy = e.clientY - prevY;
+        zoomingArea.style.left = `${parseInt(zoomingArea.style.left || 0) + dx}px`;
+        zoomingArea.style.top = `${parseInt(zoomingArea.style.top || 0) + dy}px`;
+        prevX = e.clientX;
+        prevY = e.clientY;
+    });
+
+    zoomingArea.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+
+    zoomingArea.addEventListener('mouseleave', () => {
+        isDragging = false;
+    });
 
     const zoomIn = () => {
         zoomLevel += 0.1;
@@ -17,12 +46,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         zoomingArea.style.transform = `scale(${zoomLevel})`;
     };
 
-    mapContainer.addEventListener('wheel', (e) => {
-        if (e.deltaY < 0) zoomIn();
-        else zoomOut();
-    });
-
-    let zoomInInterval, zoomOutInterval;
     zoomInButton.addEventListener('mousedown', () => {
         zoomInInterval = setInterval(zoomIn, 100);
     });
