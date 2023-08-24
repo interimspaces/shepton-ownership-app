@@ -20,24 +20,27 @@ body, html {
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 2px;
-    left: 1px;
+    top: 0; /* Adjusted */
+    left: 0; /* Adjusted */
     cursor: grab;
+    transition: transform 0.3s ease; /* Added for smooth zooming */
 }
 
 .zooming-area:active {
     cursor: grabbing;
 }
 
-.background-map, .building-objects {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 2px;
-    left: 1px;
+.background-map {
+    width: 100%; /* Maintain proportions */
+    display: block; /* Maintain proportions */
 }
 
 .building-objects {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
     z-index: 1;
 }
 
@@ -60,7 +63,7 @@ body, html {
 .zoom-controls {
     position: absolute;
     bottom: 40px;
-    right: 10px;
+    left: 10px; /* Changed from right to left */
     z-index: 9999;
     display: flex;
     flex-direction: column;

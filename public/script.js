@@ -35,16 +35,22 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
 
     const zoomIn = () => {
-        zoomLevel += 0.1;
-        if (zoomLevel > 2) zoomLevel = 2;
+        zoomLevel = Math.min(2, zoomLevel + 0.05);
         zoomingArea.style.transform = `scale(${zoomLevel})`;
     };
 
     const zoomOut = () => {
-        zoomLevel -= 0.1;
-        if (zoomLevel < 1) zoomLevel = 1;
+        zoomLevel = Math.max(1, zoomLevel - 0.05);
         zoomingArea.style.transform = `scale(${zoomLevel})`;
     };
+
+    zoomingArea.addEventListener('wheel', (e) => {
+        if (e.deltaY < 0) {
+            zoomIn();
+        } else {
+            zoomOut();
+        }
+    });
 
     zoomInButton.addEventListener('mousedown', () => {
         zoomInInterval = setInterval(zoomIn, 100);
