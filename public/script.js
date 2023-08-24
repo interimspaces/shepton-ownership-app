@@ -67,6 +67,15 @@ window.addEventListener('DOMContentLoaded', async () => {
         clearInterval(zoomOutInterval);
     });
 
+    // Mouse wheel zooming
+    zoomingArea.addEventListener('wheel', (e) => {
+        if (e.deltaY < 0) {
+            zoomIn();
+        } else {
+            zoomOut();
+        }
+    });
+
     // Fetch the SVG file
     const response = await fetch('/data/buildings.svg');
     const svgText = await response.text();
