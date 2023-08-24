@@ -1,5 +1,6 @@
 window.addEventListener('DOMContentLoaded', async () => {
-    const mapContainer = document.querySelector('.building-objects');
+    const mapContainer = document.querySelector('.map-container'); // Target the whole map container for zooming
+    const buildingObjects = document.querySelector('.building-objects');
     const response = await fetch('/data/buildings.svg');
     const svgText = await response.text();
     const tempContainer = document.createElement('div');
@@ -24,7 +25,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    mapContainer.appendChild(svgElement);
+    buildingObjects.appendChild(svgElement); // Appending SVG to the building objects container
 
     const zoomInButton = document.getElementById('zoomIn');
     const zoomOutButton = document.getElementById('zoomOut');
@@ -33,14 +34,12 @@ window.addEventListener('DOMContentLoaded', async () => {
     zoomInButton.addEventListener('click', () => {
         zoomLevel += 0.1;
         if (zoomLevel > 2) zoomLevel = 2;
-        mapContainer.style.transformOrigin = '0 0';
-        mapContainer.style.transform = `scale(${zoomLevel})`;
+        mapContainer.style.transform = `scale(${zoomLevel})`; // Applying zoom to the entire map container
     });
 
     zoomOutButton.addEventListener('click', () => {
         zoomLevel -= 0.1;
         if (zoomLevel < 1) zoomLevel = 1;
-        mapContainer.style.transformOrigin = '0 0';
-        mapContainer.style.transform = `scale(${zoomLevel})`;
+        mapContainer.style.transform = `scale(${zoomLevel})`; // Applying zoom to the entire map container
     });
 });

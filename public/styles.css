@@ -12,6 +12,8 @@ body, html {
     flex: 3;
     position: relative;
     overflow: hidden;
+    transition: transform 0.3s; /* Add this line for smooth zooming */
+
 }
 
 .background-map {
