@@ -1,6 +1,7 @@
 body, html {
     margin: 0;
     padding: 0;
+    position: relative;
 }
 
 .layout {
@@ -12,13 +13,13 @@ body, html {
     flex: 3;
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s; /* Add this line for smooth zooming */
-
+    transition: transform 0.3s ease;
 }
 
 .background-map {
     width: 100%;
     height: auto;
+    display: block;
     position: absolute;
     top: 0;
     left: 0;
@@ -50,15 +51,18 @@ body, html {
 }
 
 .zoom-controls {
-    position: absolute;
+    position: fixed;
     top: 40px;
     left: 10px;
-    z-index: 2;
+    z-index: 3;
 }
 
 .building-object {
     fill: #999999;
     transition: all 0.3s;
+    stroke: #999999;
+    stroke-width: 0px;
+    filter: drop-shadow(0 0px 0px rgba(0, 0, 0, 0));
 }
 
 .building-object:hover {
