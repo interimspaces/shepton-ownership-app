@@ -11,13 +11,14 @@ window.addEventListener('DOMContentLoaded', async () => {
     let prevX, prevY;
 
     zoomingArea.addEventListener('mousedown', (e) => {
+        if (zoomLevel <= 1) return; // Only allow dragging if zoomed in
         isDragging = true;
         prevX = e.clientX;
         prevY = e.clientY;
     });
 
     zoomingArea.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
+        if (!isDragging || zoomLevel <= 1) return; // Only allow dragging if zoomed in
         const dx = e.clientX - prevX;
         const dy = e.clientY - prevY;
         zoomingArea.style.left = `${parseInt(zoomingArea.style.left || 0) + dx}px`;
@@ -35,22 +36,16 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
 
     const zoomIn = () => {
-        zoomLevel = Math.min(2, zoomLevel + 0.05);
+        zoomLevel += 0.1;
+        if (zoomLevel > 2) zoomLevel = 2;
         zoomingArea.style.transform = `scale(${zoomLevel})`;
     };
 
     const zoomOut = () => {
-        zoomLevel = Math.max(1, zoomLevel - 0.05);
+        zoomLevel -= 0.1;
+        if (zoomLevel < 1) zoomLevel = 1;
         zoomingArea.style.transform = `scale(${zoomLevel})`;
     };
-
-    zoomingArea.addEventListener('wheel', (e) => {
-        if (e.deltaY < 0) {
-            zoomIn();
-        } else {
-            zoomOut();
-        }
-    });
 
     zoomInButton.addEventListener('mousedown', () => {
         zoomInInterval = setInterval(zoomIn, 100);
