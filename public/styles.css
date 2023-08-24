@@ -70,3 +70,16 @@ body, html {
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); /* Shadow effect */
     pointer-events: none; /* Prevents the modal from interfering with hover effects on the SVG */
 }
+
+.zoom-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10; /* Ensure it appears above other elements */
+}
+
+#zoomIn, #zoomOut {
+    font-size: 20px;
+    padding: 5px;
+    cursor: pointer;
+}

@@ -53,3 +53,21 @@ svgElement.querySelectorAll('polygon').forEach((path) => {
         document.getElementById('buildingModal').style.display = 'none';
     });
 });
+
+// map zoom
+const zoomInButton = document.getElementById('zoomIn');
+const zoomOutButton = document.getElementById('zoomOut');
+const mapContainer = document.querySelector('.map-container');
+let zoomLevel = 1;
+
+zoomInButton.addEventListener('click', () => {
+    zoomLevel += 0.1;
+    if (zoomLevel > 2) zoomLevel = 2; // Set max zoom level
+    mapContainer.style.transform = `scale(${zoomLevel})`;
+});
+
+zoomOutButton.addEventListener('click', () => {
+    zoomLevel -= 0.1;
+    if (zoomLevel < 1) zoomLevel = 1; // Set min zoom level
+    mapContainer.style.transform = `scale(${zoomLevel})`;
+});
