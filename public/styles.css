@@ -17,20 +17,19 @@ body, html {
 .background-map {
     width: 100%;
     height: auto;
-    display: block;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 0; /* Ensure that it stays below the SVG */
+    z-index: 0;
 }
 
 .building-objects {
     position: absolute;
-    width: 100%; /* Match the width of the parent container */
-    height: auto; /* Maintain aspect ratio */
-    top: 1px; /* Align to the top */
-    left: 2px; /* Align to the left */
-    z-index: 1; /* Ensure it appears above the background */
+    width: 100%;
+    height: auto;
+    top: 1px;
+    left: 2px;
+    z-index: 1;
 }
 
 #timeline {
@@ -52,16 +51,16 @@ body, html {
     position: absolute;
     top: 40px;
     left: 10px;
-    z-index: 2; /* Ensure they are above the map and other elements */
+    z-index: 2;
 }
 
 .building-object {
-    fill: #999999; /* Set the fill color for the building objects */
-    transition: all 0.3s; /* For smooth transition */
+    fill: #999999;
+    transition: all 0.3s;
 }
 
 .building-object:hover {
-    stroke: #ff6600; /* Outline color on hover */
-    stroke-width: 6px; /* Outline thickness on hover */
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); /* Long drop shadow on hover */
+    stroke: #ff6600;
+    stroke-width: 6px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
 }
