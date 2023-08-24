@@ -17,9 +17,17 @@ body, html {
 .background-map, .building-objects {
     width: 100%;
     position: absolute;
+    transition: transform 0.3s ease; /* Smooth zoom transition */
+}
+
+.background-map {
     top: 0;
     left: 0;
-    transition: transform 0.3s ease; /* Smooth zoom transition */
+}
+
+.building-objects {
+    top: 2px;
+    left: 1px;
 }
 
 .zoom-controls {
@@ -47,13 +55,4 @@ body, html {
 
 .building-object {
     fill: #999999;
-    transition: all 0.3s;
-    left: 2px;
-    top: 1px;
-}
-
-.building-object:hover {
-    stroke: #ff6600;
-    stroke-width: 6px;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-}
+    transition: all 0.3s
