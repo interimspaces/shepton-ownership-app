@@ -9,12 +9,14 @@
 <body>
     <div class="layout">
         <div class="map-container">
-            <div class="zoom-controls">
-                <button id="zoomIn">Zoom In</button>
-                <button id="zoomOut">Zoom Out</button>
+            <div class="zooming-area">
+                <div class="zoom-controls">
+                    <button id="zoomIn">+</button>
+                    <button id="zoomOut">-</button>
+                </div>
+                <img src="images/shepton-background-map.png" class="background-map" alt="Map">
+                <div class="building-objects"></div>
             </div>
-            <img src="images/shepton-background-map.png" class="background-map" alt="Map">
-            <div class="building-objects"></div>
             <div id="timeline">Current Date</div>
         </div>
         <div class="sidebar">
