@@ -45,6 +45,10 @@ window.addEventListener('DOMContentLoaded', async () => {
         zoomLevel -= 0.1;
         if (zoomLevel < 1) zoomLevel = 1;
         zoomingArea.style.transform = `scale(${zoomLevel})`;
+        if (zoomLevel === 1) {
+            zoomingArea.style.left = '1px';
+            zoomingArea.style.top = '2px';
+        }
     };
 
     zoomInButton.addEventListener('mousedown', () => {
