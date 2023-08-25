@@ -77,7 +77,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       }
     });
   
-    const response = await fetch('./data/buildings.svg');
+    const response = await fetch('/public/data/buildings.svg');
     if (!response.ok) {
       console.error('Error fetching the SVG file:', response.status, response.statusText);
       return;
