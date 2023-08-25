@@ -3,22 +3,25 @@ window.addEventListener('DOMContentLoaded', async () => {
     const zoomInButton = document.getElementById('zoomIn');
     const zoomOutButton = document.getElementById('zoomOut');
     const mapContainer = document.querySelector('.building-objects');
+    const editButton = document.getElementById('editButton');
+    const saveButton = document.getElementById('saveButton');
+    const fields = document.querySelectorAll('.field');
+
     let zoomLevel = 1;
     let zoomInInterval, zoomOutInterval;
-
-    // Drag functionality
     let isDragging = false;
     let prevX, prevY;
 
+    // Drag functionality
     zoomingArea.addEventListener('mousedown', (e) => {
-        if (zoomLevel <= 1) return; // Only allow dragging if zoomed in
+        if (zoomLevel <= 1) return;
         isDragging = true;
         prevX = e.clientX;
         prevY = e.clientY;
     });
 
     zoomingArea.addEventListener('mousemove', (e) => {
-        if (!isDragging || zoomLevel <= 1) return; // Only allow dragging if zoomed in
+        if (!isDragging || zoomLevel <= 1) return;
         const dx = e.clientX - prevX;
         const dy = e.clientY - prevY;
         zoomingArea.style.left = `${parseInt(zoomingArea.style.left || 0) + dx}px`;
@@ -77,15 +80,13 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Fetch the SVG file
-    const response = await fetch('./data/buildings.svg'); // Updated the path
+    const response = await fetch('./data/buildings.svg');
     if (!response.ok) {
         console.error('Error fetching the SVG file:', response.status, response.statusText);
         return;
     }
     
     const svgText = await response.text();
-
-    // Create a temporary container to parse the SVG
     const tempContainer = document.createElement('div');
     tempContainer.innerHTML = svgText;
     const svgElement = tempContainer.querySelector('svg');
@@ -101,8 +102,34 @@ window.addEventListener('DOMContentLoaded', async () => {
             e.target.style.stroke = '';
             e.target.style.strokeWidth = '';
         });
+        path.addEventListener('click', (e) => {
+            // Populate fields here based on the clicked building object
+            fields.forEach(field => {
+                field.value = "Sample Value"; // Replace with the actual value
+                field.disabled = true;
+            });
+            editButton.disabled = false;
+            saveButton.disabled = true;
+        });
     });
 
     // Append the SVG to the building objects container
     mapContainer.appendChild(svgElement);
+
+    editButton.addEventListener('click', () => {
+        fields.forEach(field => {
+            field.disabled = false;
+        });
+        editButton.disabled = true;
+        saveButton.disabled = false;
+    });
+
+    saveButton.addEventListener('click', () => {
+        fields.forEach(field => {
+            field.disabled = true;
+            // Save logic here for the fields
+        });
+        editButton.disabled = false;
+        saveButton.disabled = true;
+    });
 });
