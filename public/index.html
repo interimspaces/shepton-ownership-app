@@ -31,17 +31,33 @@
             </div>
             <div class="property-details">
                 <h3>Property Details</h3>
-                <label for="propertyName">Name:</label><input id="propertyName" type="text"><br>
-                <label for="propertyStreet">Street:</label><input id="propertyStreet" type="text"><br>
-                <!-- Add the rest of the property fields here ... -->
+                SVG ID: <input type="text" id="SVGID" disabled readonly><br>
+                Number: <input type="text" id="Number" disabled><br>
+                Name: <input type="text" id="Name" disabled><br>
+                Street: <input type="text" id="Street" disabled><br>
+                Town: <input type="text" id="Town" disabled><br>
+                Post Code: <input type="text" id="PostCode" disabled><br>
+                Ward Location: <input type="text" id="WardLocation" disabled><br>
+                Type: <input type="text" id="Type" disabled><br>
+                Category: <input type="text" id="Category" disabled><br>
+                Tenant: <input type="text" id="Tenant" disabled><br>
+                Occupation Status: <input type="text" id="OccupationStatus" disabled><br>
+                Listed Status: <input type="text" id="ListedStatus" disabled><br>
+                Conservation Zone: <input type="text" id="ConservationZone" disabled><br>
+                Notes: <input type="text" id="Notes" disabled><br>
+                Purchase Date: <input type="text" id="PurchaseDate" disabled><br>
+                Purchase Amount: <input type="text" id="PurchaseAmount" disabled><br>
                 <button id="editProperty">Edit</button>
                 <button id="saveProperty">Save</button>
                 <button id="deleteHistory">Delete History</button>
             </div>
             <div class="ownership-details">
                 <h3>Ownership Details</h3>
-                <label for="freeholdOwner">Freehold Owner:</label><input id="freeholdOwner" type="text"><br>
-                <!-- Add the rest of the ownership fields here ... -->
+                Owner ID: <input type="text" id="OwnerID" disabled readonly><br>
+                Property ID: <input type="text" id="PropertyID" disabled readonly><br>
+                Resolved Owner: <input type="text" id="ResolvedOwner" disabled><br>
+                Freehold Owner: <input type="text" id="FreeholdOwner" disabled><br>
+                Leasehold Owner: <input type="text" id="LeaseholdOwner" disabled><br>
                 <button id="addNewOwner">Add New Owner</button>
             </div>
         </div>
@@ -49,5 +65,3 @@
     <script src="/js/script.js"></script>
 </body>
 </html>
-
-

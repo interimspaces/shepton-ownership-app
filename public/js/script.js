@@ -4,15 +4,14 @@ window.addEventListener('DOMContentLoaded', async () => {
     const zoomOutButton = document.getElementById('zoomOut');
     const mapContainer = document.querySelector('.building-objects');
     const editButton = document.getElementById('editProperty');
-    const saveButton = document.getElementById('saveProperty');    
-    const fields = document.querySelectorAll('.field');
+    const saveButton = document.getElementById('saveProperty');
+    const fields = document.querySelectorAll('.property-details input[type="text"], .ownership-details input[type="text"]');
 
     let zoomLevel = 1;
     let zoomInInterval, zoomOutInterval;
     let isDragging = false;
     let prevX, prevY;
 
-    // Drag functionality
     zoomingArea.addEventListener('mousedown', (e) => {
         if (zoomLevel <= 1) return;
         isDragging = true;
@@ -49,8 +48,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         if (zoomLevel < 1) zoomLevel = 1;
         zoomingArea.style.transform = `scale(${zoomLevel})`;
         if (zoomLevel === 1) {
-            zoomingArea.style.left = '1px';
-            zoomingArea.style.top = '2px';
+            zoomingArea.style.left = '0px';
+            zoomingArea.style.top = '0px';
         }
     };
 
@@ -70,7 +69,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         clearInterval(zoomOutInterval);
     });
 
-    // Mouse wheel zooming
     zoomingArea.addEventListener('wheel', (e) => {
         if (e.deltaY < 0) {
             zoomIn();
@@ -79,19 +77,12 @@ window.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Fetch the SVG file
     const response = await fetch('./data/buildings.svg');
-    if (!response.ok) {
-        console.error('Error fetching the SVG file:', response.status, response.statusText);
-        return;
-    }
-    
     const svgText = await response.text();
     const tempContainer = document.createElement('div');
     tempContainer.innerHTML = svgText;
     const svgElement = tempContainer.querySelector('svg');
 
-    // Add interactivity to the polygons
     svgElement.querySelectorAll('polygon').forEach((path) => {
         path.classList.add('building-object');
         path.addEventListener('mouseover', (e) => {
@@ -103,7 +94,6 @@ window.addEventListener('DOMContentLoaded', async () => {
             e.target.style.strokeWidth = '';
         });
         path.addEventListener('click', (e) => {
-            // Populate fields here based on the clicked building object
             fields.forEach(field => {
                 field.value = "Sample Value"; // Replace with the actual value
                 field.disabled = true;
@@ -113,7 +103,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // Append the SVG to the building objects container
     mapContainer.appendChild(svgElement);
 
     editButton.addEventListener('click', () => {
