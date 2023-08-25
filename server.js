@@ -1,142 +1,97 @@
-window.addEventListener('DOMContentLoaded', async () => {
-    const zoomingArea = document.querySelector('.zooming-area');
-    const zoomInButton = document.getElementById('zoomIn');
-    const zoomOutButton = document.getElementById('zoomOut');
-    const mapContainer = document.querySelector('.building-objects');
-    const editButton = document.getElementById('editProperty');
-    const saveButton = document.getElementById('saveProperty');
-    const fields = document.querySelectorAll('.field');
-  
-    let zoomLevel = 1;
-    let zoomInInterval, zoomOutInterval;
-    let isDragging = false;
-    let prevX, prevY;
-  
-    zoomingArea.addEventListener('mousedown', (e) => {
-      if (zoomLevel <= 1) return;
-      isDragging = true;
-      prevX = e.clientX;
-      prevY = e.clientY;
-    });
-  
-    zoomingArea.addEventListener('mousemove', (e) => {
-      if (!isDragging || zoomLevel <= 1) return;
-      const dx = e.clientX - prevX;
-      const dy = e.clientY - prevY;
-      zoomingArea.style.left = `${parseInt(zoomingArea.style.left || 0) + dx}px`;
-      zoomingArea.style.top = `${parseInt(zoomingArea.style.top || 0) + dy}px`;
-      prevX = e.clientX;
-      prevY = e.clientY;
-    });
-  
-    zoomingArea.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-  
-    zoomingArea.addEventListener('mouseleave', () => {
-      isDragging = false;
-    });
-  
-    const zoomIn = () => {
-      zoomLevel += 0.1;
-      if (zoomLevel > 2) zoomLevel = 2;
-      zoomingArea.style.transform = `scale(${zoomLevel})`;
-    };
-  
-    const zoomOut = () => {
-      zoomLevel -= 0.1;
-      if (zoomLevel < 1) zoomLevel = 1;
-      zoomingArea.style.transform = `scale(${zoomLevel})`;
-      if (zoomLevel === 1) {
-          zoomingArea.style.left = '1px';
-          zoomingArea.style.top = '2px';
-      }
-    };
-  
-    zoomInButton.addEventListener('mousedown', () => {
-      zoomInInterval = setInterval(zoomIn, 100);
-    });
-  
-    zoomInButton.addEventListener('mouseup', () => {
-      clearInterval(zoomInInterval);
-    });
-  
-    zoomOutButton.addEventListener('mousedown', () => {
-      zoomOutInterval = setInterval(zoomOut, 100);
-    });
-  
-    zoomOutButton.addEventListener('mouseup', () => {
-      clearInterval(zoomOutInterval);
-    });
-  
-    zoomingArea.addEventListener('wheel', (e) => {
-      if (e.deltaY < 0) {
-        zoomIn();
-      } else {
-        zoomOut();
-      }
-    });
-  
-    const response = await fetch('/public/data/buildings.svg');
-    if (!response.ok) {
-      console.error('Error fetching the SVG file:', response.status, response.statusText);
-      return;
-    }
-      
-    const svgText = await response.text();
-    const tempContainer = document.createElement('div');
-    tempContainer.innerHTML = svgText;
-    const svgElement = tempContainer.querySelector('svg');
-  
-    svgElement.querySelectorAll('polygon').forEach(async (path) => {
-      path.addEventListener('click', async (e) => {
-        const propertyId = e.target.id;
-        const property = await fetch(`/properties/${propertyId}`);
-        const propertyData = await property.json();
-        fields.forEach(field => {
-          const key = field.getAttribute('data-key');
-          field.value = propertyData[key] || '';
-          field.disabled = true;
-        });
-        editButton.disabled = false;
-        saveButton.disabled = true;
-      });
-    });
-  
-    mapContainer.appendChild(svgElement);
-  
-    editButton.addEventListener('click', () => {
-      fields.forEach(field => {
-        field.disabled = false;
-      });
-      editButton.disabled = true;
-      saveButton.disabled = false;
-    });
-  
-    saveButton.addEventListener('click', async () => {
-      const propertyId = '123'; // Replace with the correct property ID
-      const propertyData = {
-        // Extract property data from fields
-        // Example:
-        PropertySVGID: document.getElementById('PropertySVGID').value,
-        PropertyNumber: document.getElementById('PropertyNumber').value,
-        // ...
-      };
-  
-      const response = await fetch(`/properties/${propertyId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ property: propertyData })
-      });
-  
-      const result = await response.json();
-      console.log(result.message);
-  
-      fields.forEach(field => {
-        field.disabled = true;
-      });
-      editButton.disabled = false;
-      saveButton.disabled = true;
-    });
-  });
-  
+// Required Modules
+const express = require('express');
+const path = require('path');
+const pool = require('./database');
+
+// Initialisation
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Serve static files from public directory
+app.use(express.static('public'));
+
+// Middleware
+app.use(express.json());
+
+// Error handling middleware
+const errorHandler = (err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
+};
+
+// Main Page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// GET all properties
+app.get('/properties', async (req, res, next) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM PropertyTable');
+    res.status(200).json(rows);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET a single property by ID
+app.get('/properties/:id', async (req, res, next) => {
+  const id = parseInt(req.params.id);
+  try {
+    const { rows } = await pool.query('SELECT * FROM PropertyTable WHERE PropertyID = $1', [id]);
+    res.status(200).json(rows[0]);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// PUT - Update a property
+app.put('/properties/:id', async (req, res, next) => {
+  const id = parseInt(req.params.id);
+  const property = req.body;
+
+  // Your existing SQL update query
+  const updateQuery = /* your SQL update query here */;
+
+  try {
+    await pool.query(updateQuery, Object.values(property).concat(id));
+    res.status(200).send('Property updated successfully.');
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST - Add a new owner
+app.post('/owners', async (req, res, next) => {
+  const owner = req.body;
+
+  // Your existing SQL insert query
+  const insertQuery = /* your SQL insert query here */;
+
+  try {
+    await pool.query(insertQuery, Object.values(owner));
+    res.status(201).send('Ownership added successfully.');
+  } catch (err) {
+    next(err);
+  }
+});
+
+// DELETE - Delete ownership history
+app.delete('/owners/:id', async (req, res, next) => {
+  const id = parseInt(req.params.id);
+  const deleteQuery = 'DELETE FROM OwnershipTable WHERE OwnerID = $1';
+  try {
+    await pool.query(deleteQuery, [id]);
+    res.status(200).send('Ownership history deleted successfully.');
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Error Handler Middleware
+app.use(errorHandler);
+
+// Start Server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
