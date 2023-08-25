@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Updated the path -->
+    <link rel="stylesheet" href="/css/styles.css">
     <title>Shepton Town Map</title>
 </head>
 <body>
     <div class="layout">
         <div class="map-container">
             <div class="zooming-area">
-                <img src="/images/shepton-background-map.png" class="background-map" alt="Map"> <!-- Updated the path -->
+                <img src="/images/shepton-background-map.png" class="background-map" alt="Map">
                 <div class="building-objects"></div>
                 <div id="timeline">Current Date</div>
             </div>
@@ -20,11 +20,29 @@
             </div>
         </div>
         <div class="sidebar">
-            <div class="summary-box">
-                <!-- Summary information will be displayed here -->
+            <div class="toolbar">
+                <h3>Visualisations</h3>
+                <label><input type="checkbox" id="visualiseOwnership"> Ownership</label>
+                <label><input type="checkbox" id="visualiseTenantType"> Tenant Type</label>
+                <label><input type="checkbox" id="visualiseListedStatus"> Listed Status</label>
+                <label><input type="checkbox" id="visualiseCommercial"> Commercial</label>
+                <label><input type="checkbox" id="visualiseResidential"> Residential</label>
+                <label><input type="checkbox" id="visualiseEmpty"> Empty</label>
+            </div>
+            <div class="property-details">
+                <h3>Property Details</h3>
+                <!-- Property details form fields here -->
+                <button id="editProperty">Edit</button>
+                <button id="saveProperty">Save</button>
+                <button id="deleteHistory">Delete History</button>
+            </div>
+            <div class="ownership-details">
+                <h3>Ownership Details</h3>
+                <!-- Ownership details form fields here -->
+                <button id="addNewOwner">Add New Owner</button>
             </div>
         </div>
     </div>
-    <script src="/js/script.js"></script> <!-- Updated the path -->
+    <script src="/js/script.js"></script>
 </body>
 </html>

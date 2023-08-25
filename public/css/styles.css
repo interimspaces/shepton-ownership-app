@@ -20,10 +20,10 @@ body, html {
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0; /* Adjusted */
-    left: 0; /* Adjusted */
+    top: 0;
+    left: 0;
     cursor: grab;
-    transition: transform 0.3s ease; /* Added for smooth zooming */
+    transition: transform 0.3s ease;
 }
 
 .zooming-area:active {
@@ -31,8 +31,8 @@ body, html {
 }
 
 .background-map {
-    width: 100%; /* Maintain proportions */
-    display: block; /* Maintain proportions */
+    width: 100%;
+    display: block;
 }
 
 .building-objects {
@@ -54,16 +54,25 @@ body, html {
 .sidebar {
     flex: 1;
     background-color: #f1f1f1;
+    overflow: auto; /* Added to handle overflow */
 }
 
-.summary-box {
-    padding: 20px;
+.toolbar,
+.property-details,
+.ownership-details {
+    padding: 20px; /* Consistent padding */
+    border-bottom: 1px solid #ccc; /* Separator lines */
+}
+
+.property-details button,
+.ownership-details button {
+    margin-right: 10px; /* Spacing between buttons */
 }
 
 .zoom-controls {
     position: absolute;
     bottom: 40px;
-    left: 10px; /* Changed from right to left */
+    left: 10px;
     z-index: 9999;
     display: flex;
     flex-direction: column;
