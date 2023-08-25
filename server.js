@@ -1,110 +1,142 @@
-const express = require('express');
-const path = require('path');
-const { Pool } = require('pg');
-const app = express();
-
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
-
-// JSON middleware
-app.use(express.json());
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
-});
-
-pool.on('connect', () => {
-  console.log('Connected to the database');
-});
-
-// Get all properties
-app.get('/properties', (req, res) => {
-  pool.query('SELECT * FROM PropertyTable', (error, results) => {
-    if (error) {
-      throw error;
-    }
-    res.status(200).json(results.rows);
-  });
-});
-
-// Get individual property by ID
-app.get('/properties/:id', (req, res) => {
-    const id = req.params.id;
-    pool.query('SELECT * FROM PropertyTable WHERE PropertyID = $1', [id], (error, results) => {
-      if (error) {
-        throw error;
-      }
-      res.status(200).json(results.rows[0]);
+window.addEventListener('DOMContentLoaded', async () => {
+    const zoomingArea = document.querySelector('.zooming-area');
+    const zoomInButton = document.getElementById('zoomIn');
+    const zoomOutButton = document.getElementById('zoomOut');
+    const mapContainer = document.querySelector('.building-objects');
+    const editButton = document.getElementById('editProperty');
+    const saveButton = document.getElementById('saveProperty');
+    const fields = document.querySelectorAll('.field');
+  
+    let zoomLevel = 1;
+    let zoomInInterval, zoomOutInterval;
+    let isDragging = false;
+    let prevX, prevY;
+  
+    zoomingArea.addEventListener('mousedown', (e) => {
+      if (zoomLevel <= 1) return;
+      isDragging = true;
+      prevX = e.clientX;
+      prevY = e.clientY;
     });
-});
-
-// Update a property
-app.put('/properties/:id', async (req, res) => {
-  const { id } = req.params;
-  const propertyData = req.body.property;
-  const query = `
-    UPDATE PropertyTable SET
-    PropertySVGID = $1,
-    PropertyNumber = $2,
-    PropertyName = $3,
-    PropertyStreet = $4,
-    PropertyTown = $5,
-    PropertyPostCode = $6,
-    PropertyWardLocation = $7,
-    PropertyType = $8,
-    PropertyCategory = $9,
-    PropertyTenant = $10,
-    PropertyOccupationStatus = $11,
-    PropertyListedStatus = $12,
-    PropertyConservationZone = $13,
-    PropertyNotes = $14,
-    PropertyPurchaseDate = $15,
-    PropertyPurchaseAmount = $16
-    WHERE PropertyID = $17;
-  `;
-  try {
-    await pool.query(query, Object.values(propertyData).concat(id));
-    res.status(200).json({ message: 'Property updated successfully' });
-  } catch (error) {
-    res.status(400).json({ error: 'Could not update property' });
-  }
-});
-
-// Add a new owner
-app.post('/properties/:id/ownership', async (req, res) => {
-  const { id } = req.params;
-  const ownershipData = req.body;
-  const query = `
-    INSERT INTO OwnershipTable (PropertyID, ResolvedOwner, FreeholdOwner, LeaseholdOwner)
-    VALUES ($1, $2, $3, $4);
-  `;
-  try {
-    await pool.query(query, [id, ...Object.values(ownershipData)]);
-    res.status(201).json({ message: 'Ownership added successfully' });
-  } catch (error) {
-    res.status(400).json({ error: 'Could not add ownership' });
-  }
-});
-
-// Delete ownership history
-app.delete('/ownership/:ownerId', async (req, res) => {
-  const { ownerId } = req.params;
-  const query = 'DELETE FROM OwnershipTable WHERE OwnerID = $1;';
-  try {
-    await pool.query(query, [ownerId]);
-    res.status(200).json({ message: 'Ownership deleted successfully' });
-  } catch (error) {
-    res.status(400).json({ error: 'Could not delete ownership' });
-  }
-});
-
-// Send index.html for all other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '/public/index.html'));
-});
-
-// Start the server
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+  
+    zoomingArea.addEventListener('mousemove', (e) => {
+      if (!isDragging || zoomLevel <= 1) return;
+      const dx = e.clientX - prevX;
+      const dy = e.clientY - prevY;
+      zoomingArea.style.left = `${parseInt(zoomingArea.style.left || 0) + dx}px`;
+      zoomingArea.style.top = `${parseInt(zoomingArea.style.top || 0) + dy}px`;
+      prevX = e.clientX;
+      prevY = e.clientY;
+    });
+  
+    zoomingArea.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+  
+    zoomingArea.addEventListener('mouseleave', () => {
+      isDragging = false;
+    });
+  
+    const zoomIn = () => {
+      zoomLevel += 0.1;
+      if (zoomLevel > 2) zoomLevel = 2;
+      zoomingArea.style.transform = `scale(${zoomLevel})`;
+    };
+  
+    const zoomOut = () => {
+      zoomLevel -= 0.1;
+      if (zoomLevel < 1) zoomLevel = 1;
+      zoomingArea.style.transform = `scale(${zoomLevel})`;
+      if (zoomLevel === 1) {
+          zoomingArea.style.left = '1px';
+          zoomingArea.style.top = '2px';
+      }
+    };
+  
+    zoomInButton.addEventListener('mousedown', () => {
+      zoomInInterval = setInterval(zoomIn, 100);
+    });
+  
+    zoomInButton.addEventListener('mouseup', () => {
+      clearInterval(zoomInInterval);
+    });
+  
+    zoomOutButton.addEventListener('mousedown', () => {
+      zoomOutInterval = setInterval(zoomOut, 100);
+    });
+  
+    zoomOutButton.addEventListener('mouseup', () => {
+      clearInterval(zoomOutInterval);
+    });
+  
+    zoomingArea.addEventListener('wheel', (e) => {
+      if (e.deltaY < 0) {
+        zoomIn();
+      } else {
+        zoomOut();
+      }
+    });
+  
+    const response = await fetch('./data/buildings.svg');
+    if (!response.ok) {
+      console.error('Error fetching the SVG file:', response.status, response.statusText);
+      return;
+    }
+      
+    const svgText = await response.text();
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = svgText;
+    const svgElement = tempContainer.querySelector('svg');
+  
+    svgElement.querySelectorAll('polygon').forEach(async (path) => {
+      path.addEventListener('click', async (e) => {
+        const propertyId = e.target.id;
+        const property = await fetch(`/properties/${propertyId}`);
+        const propertyData = await property.json();
+        fields.forEach(field => {
+          const key = field.getAttribute('data-key');
+          field.value = propertyData[key] || '';
+          field.disabled = true;
+        });
+        editButton.disabled = false;
+        saveButton.disabled = true;
+      });
+    });
+  
+    mapContainer.appendChild(svgElement);
+  
+    editButton.addEventListener('click', () => {
+      fields.forEach(field => {
+        field.disabled = false;
+      });
+      editButton.disabled = true;
+      saveButton.disabled = false;
+    });
+  
+    saveButton.addEventListener('click', async () => {
+      const propertyId = '123'; // Replace with the correct property ID
+      const propertyData = {
+        // Extract property data from fields
+        // Example:
+        PropertySVGID: document.getElementById('PropertySVGID').value,
+        PropertyNumber: document.getElementById('PropertyNumber').value,
+        // ...
+      };
+  
+      const response = await fetch(`/properties/${propertyId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ property: propertyData })
+      });
+  
+      const result = await response.json();
+      console.log(result.message);
+  
+      fields.forEach(field => {
+        field.disabled = true;
+      });
+      editButton.disabled = false;
+      saveButton.disabled = true;
+    });
+  });
+  
