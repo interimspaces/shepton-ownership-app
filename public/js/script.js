@@ -3,8 +3,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     const zoomInButton = document.getElementById('zoomIn');
     const zoomOutButton = document.getElementById('zoomOut');
     const mapContainer = document.querySelector('.building-objects');
-    const editButton = document.getElementById('editButton');
-    const saveButton = document.getElementById('saveButton');
+    const editButton = document.getElementById('editProperty');
+    const saveButton = document.getElementById('saveProperty');    
     const fields = document.querySelectorAll('.field');
 
     let zoomLevel = 1;
