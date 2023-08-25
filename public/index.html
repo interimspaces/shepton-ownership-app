@@ -21,36 +21,27 @@
         </div>
         <div class="sidebar">
             <div class="toolbar">
-                <div class="visualisations">
-                    <!-- Checkboxes for Visualisations -->
-                    <label>
-                        <input type="checkbox" id="ownership"> Ownership
-                    </label>
-                    <!-- Add more checkboxes as needed -->
-                </div>
+                <h3>Visualisations</h3>
+                <label><input type="checkbox" id="visualiseOwnership"> Ownership</label>
+                <label><input type="checkbox" id="visualiseTenantType"> Tenant Type</label>
+                <label><input type="checkbox" id="visualiseListedStatus"> Listed Status</label>
+                <label><input type="checkbox" id="visualiseCommercial"> Commercial</label>
+                <label><input type="checkbox" id="visualiseResidential"> Residential</label>
+                <label><input type="checkbox" id="visualiseEmpty"> Empty</label>
             </div>
             <div class="property-details">
                 <h3>Property Details</h3>
-                <form id="propertyForm">
-                    <input type="text" id="propertyName" placeholder="Property Name" disabled>
-                    <!-- More fields as needed -->
-                    <button type="button" id="editProperty">Edit</button>
-                    <button type="button" id="saveProperty" disabled>Save</button>
-                </form>
+                <!-- Property details form fields here -->
+                <button id="editProperty">Edit</button>
+                <button id="saveProperty">Save</button>
+                <button id="deleteHistory">Delete History</button>
             </div>
             <div class="ownership-details">
                 <h3>Ownership Details</h3>
-                <form id="ownershipForm">
-                    <input type="text" id="ownerName" placeholder="Owner Name" disabled>
-                    <!-- More fields as needed -->
-                    <button type="button" id="editOwner">Edit</button>
-                    <button type="button" id="saveOwner" disabled>Save</button>
-                    <button type="button" id="addNewOwner">Add New Owner</button>
-                    <button type="button" id="deleteHistory">Delete History</button>
-                </form>
+                <!-- Ownership details form fields here -->
+                <button id="addNewOwner">Add New Owner</button>
             </div>
         </div>
-        
     </div>
     <script src="/js/script.js"></script>
 </body>
