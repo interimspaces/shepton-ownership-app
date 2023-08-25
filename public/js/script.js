@@ -77,7 +77,13 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
 
     // Fetch the SVG file
-    const response = await fetch('./public/data/buildings.svg'); // Updated the path
+    const response = await fetch('../public/data/buildings.svg'); // Updated the path
+    if (!response.ok) {
+        console.error('Error fetching the SVG file:', response.status, response.statusText);
+        return;
+    }
+    const svgText = await response.text();
+    
     const svgText = await response.text();
 
     // Create a temporary container to parse the SVG
