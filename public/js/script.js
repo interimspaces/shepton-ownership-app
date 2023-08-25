@@ -82,7 +82,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         console.error('Error fetching the SVG file:', response.status, response.statusText);
         return;
     }
-    const svgText = await response.text();
     
     const svgText = await response.text();
 
