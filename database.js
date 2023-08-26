@@ -1,10 +1,11 @@
-const pool = require('./database.js');
+const { Pool } = require('pg'); // Importing the Pool object from the 'pg' module
 
 const pool = new Pool({
-  connectionString: process.env.shepton-ownership-app-60f62ab2a676.herokuapp.com/, // Replace with your Heroku PostgreSQL URL
+  connectionString: process.env.DATABASE_URL, // Using an environment variable to securely store the database URL
   ssl: {
     rejectUnauthorized: false
   }
 });
 
-module.exports = pool;
+module.exports = pool; // Exporting the pool object for use in other files
+
