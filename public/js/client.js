@@ -13,10 +13,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   let zoomInInterval, zoomOutInterval;
   let isDragging = false;
   let prevX, prevY;
-  let activePolygon; // Added variable to keep track of the active polygon
-
-  // Zoom and drag functionalities remain the same
-  // ... (Your original zooming and dragging code)
+  let activePolygon;
 
   // Fetch SVG and add event listeners
   const response = await fetch('./data/buildings.svg');
@@ -24,30 +21,39 @@ window.addEventListener('DOMContentLoaded', async () => {
     console.error(`Error fetching the SVG: ${response.status}, ${response.statusText}`);
     return;
   }
-
   const svgText = await response.text();
   const tempContainer = document.createElement('div');
   tempContainer.innerHTML = svgText;
   const svgElement = tempContainer.querySelector('svg');
-
+  
+  // Debug Step 2
+  console.log("SVG Element: ", svgElement);
+  
   const propertyDataResponse = await fetch('/properties');
   const allProperties = await propertyDataResponse.json();
 
   svgElement.querySelectorAll('polygon').forEach((polygon) => {
+    // Debug Step 5
+    polygon.classList.add('building-object');
+    
     const correspondingProperty = allProperties.find((property) => property.SVGID === polygon.id);
     if (correspondingProperty) {
       polygon.dataset.propertyId = correspondingProperty.PropertyID;
     }
 
     polygon.addEventListener('click', async (e) => {
-      // Remove active state from previously active polygon
+      // Debug Step 4
+      console.log('Polygon clicked');
+      
       if (activePolygon) {
         activePolygon.classList.remove('active');
       }
-      
-      // Mark the clicked polygon as active
+
       activePolygon = e.target;
       activePolygon.classList.add('active');
+      
+      // Debug Step 6
+      console.log('Active Polygon:', activePolygon);
 
       const propertyId = activePolygon.dataset.propertyId;
       if (!propertyId) return;
@@ -66,7 +72,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  // Debug Step 3
   mapContainer.appendChild(svgElement);
+  console.log("Map Container: ", mapContainer);
 
   // Edit and Save functionalities
   editButton.addEventListener('click', () => {

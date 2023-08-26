@@ -44,7 +44,7 @@ app.get('/properties/:id', async (req, res, next) => {
     next(err);
   }
 });
-
+  
 // PUT Update Property
 app.put('/properties/:id', async (req, res, next) => {
   const id = parseInt(req.params.id);
