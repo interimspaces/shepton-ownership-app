@@ -14,71 +14,114 @@ window.addEventListener('DOMContentLoaded', async () => {
   let isDragging = false;
   let prevX, prevY;
   let activePolygon;
-
-  // Fetch SVG and add event listeners
-  const response = await fetch('./data/buildings.svg');
-  if (!response.ok) {
-    console.error(`Error fetching the SVG: ${response.status}, ${response.statusText}`);
-    return;
-  }
-  const svgText = await response.text();
-  const tempContainer = document.createElement('div');
-  tempContainer.innerHTML = svgText;
-  const svgElement = tempContainer.querySelector('svg');
   
-  // Debug Step 2
-  console.log("SVG Element: ", svgElement);
-  
-  const propertyDataResponse = await fetch('/properties');
-  const allProperties = await propertyDataResponse.json();
+  // Zoom functionality
+  const zoomIn = () => {
+    zoomLevel += 0.1;
+    zoomingArea.style.transform = `scale(${zoomLevel})`;
+  };
 
-  svgElement.querySelectorAll('polygon').forEach((polygon) => {
-    // Debug Step 5
-    polygon.classList.add('building-object');
-    
-    const correspondingProperty = allProperties.find((property) => property.SVGID === polygon.id);
-    if (correspondingProperty) {
-      polygon.dataset.propertyId = correspondingProperty.PropertyID;
+  const zoomOut = () => {
+    if (zoomLevel > 0.1) {
+      zoomLevel -= 0.1;
+      zoomingArea.style.transform = `scale(${zoomLevel})`;
     }
+  };
 
-    polygon.addEventListener('click', async (e) => {
-      // Debug Step 4
-      console.log('Polygon clicked');
-      
-      if (activePolygon) {
-        activePolygon.classList.remove('active');
-      }
-
-      activePolygon = e.target;
-      activePolygon.classList.add('active');
-      
-      // Debug Step 6
-      console.log('Active Polygon:', activePolygon);
-
-      const propertyId = activePolygon.dataset.propertyId;
-      if (!propertyId) return;
-
-      const propertyResponse = await fetch(`/properties/${propertyId}`);
-      const propertyData = await propertyResponse.json();
-
-      fields.forEach((field) => {
-        const key = field.getAttribute('data-key');
-        field.value = propertyData[key] || '';
-        field.disabled = true;
-      });
-
-      editButton.disabled = false;
-      saveButton.disabled = true;
-    });
+  zoomInButton.addEventListener('mousedown', () => {
+    zoomIn();
+    zoomInInterval = setInterval(zoomIn, 100);
   });
 
-  // Debug Step 3
-  mapContainer.appendChild(svgElement);
-  console.log("Map Container: ", mapContainer);
+  zoomInButton.addEventListener('mouseup', () => {
+    clearInterval(zoomInInterval);
+  });
+
+  zoomOutButton.addEventListener('mousedown', () => {
+    zoomOut();
+    zoomOutInterval = setInterval(zoomOut, 100);
+  });
+
+  zoomOutButton.addEventListener('mouseup', () => {
+    clearInterval(zoomOutInterval);
+  });
+
+  // Drag functionality
+  zoomingArea.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    prevX = e.clientX;
+    prevY = e.clientY;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      let dx = e.clientX - prevX;
+      let dy = e.clientY - prevY;
+      zoomingArea.scrollLeft -= dx;
+      zoomingArea.scrollTop -= dy;
+      prevX = e.clientX;
+      prevY = e.clientY;
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+  
+  const fetchSVG = async () => {
+    const response = await fetch('./data/buildings.svg');
+    if (!response.ok) {
+      console.error(`Error fetching the SVG: ${response.status}, ${response.statusText}`);
+      return;
+    }
+
+    const svgText = await response.text();
+    const tempContainer = document.createElement('div');
+    tempContainer.innerHTML = svgText;
+    const svgElement = tempContainer.querySelector('svg');
+
+    const propertyDataResponse = await fetch('/properties');
+    const allProperties = await propertyDataResponse.json();
+
+    svgElement.querySelectorAll('polygon').forEach((polygon) => {
+      const correspondingProperty = allProperties.find((property) => property.SVGID === polygon.id);
+      if (correspondingProperty) {
+        polygon.dataset.propertyId = correspondingProperty.PropertyID;
+      }
+
+      polygon.addEventListener('click', async (e) => {
+        if (activePolygon) {
+          activePolygon.classList.remove('active');
+        }
+        
+        activePolygon = e.target;
+        activePolygon.classList.add('active');
+
+        const propertyId = activePolygon.dataset.propertyId;
+        if (!propertyId) return;
+
+        const propertyResponse = await fetch(`/properties/${propertyId}`);
+        const propertyData = await propertyResponse.json();
+
+        fields.forEach((field) => {
+          const key = field.getAttribute('data-key');
+          field.value = propertyData[key] || '';
+          field.disabled = true;
+        });
+
+        editButton.disabled = false;
+        saveButton.disabled = true;
+      });
+    });
+
+    mapContainer.appendChild(svgElement);
+  };
+
+  await fetchSVG();
 
   // Edit and Save functionalities
   editButton.addEventListener('click', () => {
-    fields.forEach(field => field.disabled = false);
+    fields.forEach((field) => field.disabled = false);
     editButton.disabled = true;
     saveButton.disabled = false;
   });
@@ -86,8 +129,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   saveButton.addEventListener('click', async () => {
     const propertyId = activePolygon.dataset.propertyId;
     const propertyData = {};
-    
-    fields.forEach(field => {
+
+    fields.forEach((field) => {
       const key = field.getAttribute('data-key');
       propertyData[key] = field.value;
     });
@@ -101,7 +144,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     const result = await response.json();
     console.log(result.message);
 
-    fields.forEach(field => field.disabled = true);
+    fields.forEach((field) => field.disabled = true);
     editButton.disabled = false;
     saveButton.disabled = true;
   });
