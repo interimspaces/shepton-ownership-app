@@ -7,79 +7,78 @@ const pool = require('./database');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Serve static files from public directory
-app.use(express.static('public'));
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware
+// Middleware for parsing JSON data
 app.use(express.json());
 
-// Error handling middleware
+// Error handling middleware function
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal Server Error' });
 };
 
-// Main Page
+// Main Page Route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// GET all properties
+// GET All Properties
 app.get('/properties', async (req, res, next) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM PropertyTable');
+    const { rows } = await pool.query('SELECT * FROM PropertyTable'); // SQL query to get all properties
     res.status(200).json(rows);
   } catch (err) {
     next(err);
   }
 });
 
-// GET a single property by ID
+// GET Single Property by ID
 app.get('/properties/:id', async (req, res, next) => {
   const id = parseInt(req.params.id);
   try {
-    const { rows } = await pool.query('SELECT * FROM PropertyTable WHERE PropertyID = $1', [id]);
+    const { rows } = await pool.query('SELECT * FROM PropertyTable WHERE PropertyID = $1', [id]); // SQL query to get a single property
     res.status(200).json(rows[0]);
   } catch (err) {
     next(err);
   }
 });
 
-// PUT - Update a property
+// PUT Update Property
 app.put('/properties/:id', async (req, res, next) => {
   const id = parseInt(req.params.id);
-  const property = req.body;
+  const propertyData = req.body;
 
-  // Your existing SQL update query
-  const updateQuery = /* your SQL update query here */;
+  const updateQuery = 'UPDATE PropertyTable SET ... WHERE PropertyID = $1'; // Replace with actual SQL update query
 
   try {
-    await pool.query(updateQuery, Object.values(property).concat(id));
+    await pool.query(updateQuery, Object.values(propertyData).concat(id));
     res.status(200).send('Property updated successfully.');
   } catch (err) {
     next(err);
   }
 });
 
-// POST - Add a new owner
+// POST Add New Owner
 app.post('/owners', async (req, res, next) => {
-  const owner = req.body;
+  const ownerData = req.body;
 
-  // Your existing SQL insert query
-  const insertQuery = /* your SQL insert query here */;
+  const insertQuery = 'INSERT INTO OwnershipTable (...) VALUES (...)'; // Replace with actual SQL insert query
 
   try {
-    await pool.query(insertQuery, Object.values(owner));
+    await pool.query(insertQuery, Object.values(ownerData));
     res.status(201).send('Ownership added successfully.');
   } catch (err) {
     next(err);
   }
 });
 
-// DELETE - Delete ownership history
+// DELETE Ownership History
 app.delete('/owners/:id', async (req, res, next) => {
   const id = parseInt(req.params.id);
-  const deleteQuery = 'DELETE FROM OwnershipTable WHERE OwnerID = $1';
+  const deleteQuery = 'DELETE FROM OwnershipTable WHERE OwnerID = $1'; // SQL query to delete an ownership record
+  
   try {
     await pool.query(deleteQuery, [id]);
     res.status(200).send('Ownership history deleted successfully.');
@@ -88,10 +87,10 @@ app.delete('/owners/:id', async (req, res, next) => {
   }
 });
 
-// Error Handler Middleware
+// Use the error handler middleware
 app.use(errorHandler);
 
-// Start Server
+// Start the Server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
