@@ -54,19 +54,19 @@ body, html {
 .sidebar {
     flex: 1;
     background-color: #f1f1f1;
-    overflow: auto; /* Added to handle overflow */
+    overflow: auto;
 }
 
 .toolbar,
 .property-details,
 .ownership-details {
-    padding: 20px; /* Consistent padding */
-    border-bottom: 1px solid #ccc; /* Separator lines */
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
 }
 
 .property-details button,
 .ownership-details button {
-    margin-right: 10px; /* Spacing between buttons */
+    margin-right: 10px;
 }
 
 .zoom-controls {
@@ -87,4 +87,10 @@ body, html {
     stroke: #ff6600;
     stroke-width: 6px;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* Added styles for the active state */
+.building-object.active {
+    fill: orange;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
 }
