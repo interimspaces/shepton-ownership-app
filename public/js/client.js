@@ -101,6 +101,9 @@ window.addEventListener('DOMContentLoaded', async () => {
       const propertyId = activePolygon.dataset.propertyId;
       if (!propertyId) return;
 
+      // Add this line to update the SVG ID field in index.html
+      document.getElementById('SVGID').value = activePolygon.id;
+
       const propertyResponse = await fetch(`/properties/${propertyId}`);
       const propertyData = await propertyResponse.json();
       
