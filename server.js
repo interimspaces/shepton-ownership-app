@@ -49,6 +49,7 @@ app.get('/properties/:id', async (req, res, next) => {
 app.put('/properties/:id', async (req, res, next) => {
   const id = parseInt(req.params.id);
   const propertyData = req.body;
+  console.log("Received property data: ", propertyData);  // Debugging line
   const updateQuery = 'UPDATE PropertyTable SET propertysvgid = $1, propertynumber = $2, propertyname = $3, propertystreet = $4, propertytown = $5, propertypostcode = $6, propertywardlocation = $7, propertytype = $8, propertycategory = $9, propertytenant = $10, propertyoccupationstatus = $11, propertylistedstatus = $12, propertyconservationzone = $13, propertynotes = $14, propertypurchasedate = $15, propertypurchaseamount = $16 WHERE PropertyID = $17';
   try {
     await pool.query(updateQuery, Object.values(propertyData).concat(id));
