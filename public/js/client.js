@@ -64,10 +64,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   tempContainer.innerHTML = svgText;
   const svgElement = tempContainer.querySelector('svg');
 
-  fetch('/properties')
-  .then(response => response.json())
-  .then(data => {
-    const allProperties = data;
+  const propertyDataResponse = await fetch('/properties');
+  const allProperties = await propertyDataResponse.json();
 
   svgElement.querySelectorAll('polygon').forEach((polygon) => {
     polygon.classList.add('building-object');
@@ -95,8 +93,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         field.value = propertyData[key] || '';
         field.disabled = true;
       });
-      .catch(error => console.log('Fetch Error for /properties: ', error));
-
       editButton.disabled = false;
       saveButton.disabled = true;
     });
