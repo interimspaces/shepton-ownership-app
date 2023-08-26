@@ -7,6 +7,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const editButton = document.getElementById('editProperty');
   const saveButton = document.getElementById('saveProperty');
   const fields = document.querySelectorAll('.field');
+  const propertysvgidField = document.getElementById('propertysvgid'); // Added
 
   // State variables
   let zoomLevel = 1;
@@ -45,6 +46,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   zoomOutButton.addEventListener('mouseup', () => {
     clearInterval(zoomOutInterval);
   });
+
   // Drag functionality
   zoomingArea.addEventListener('mousedown', (e) => {
     isDragging = true;
@@ -69,10 +71,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // Fetch SVG and add event listeners
   const response = await fetch('./data/buildings.svg');
-  if (!response.ok) {
-    console.error(`Error fetching the SVG: ${response.status}, ${response.statusText}`);
-    return;
-  }
   const svgText = await response.text();
   const tempContainer = document.createElement('div');
   tempContainer.innerHTML = svgText;
@@ -87,6 +85,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     const correspondingProperty = allProperties.find((property) => property.propertyid === polygon.id);
     if (correspondingProperty) {
       polygon.dataset.propertyId = correspondingProperty.propertyid;
+      polygon.dataset.propertysvgid = correspondingProperty.propertysvgid; // Added
     }
 
     polygon.addEventListener('click', async (e) => {
@@ -101,6 +100,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       if (!propertyId) return;
 
       document.getElementById('PropertyID').value = activePolygon.id;
+      propertysvgidField.value = activePolygon.dataset.propertysvgid; // Added
 
       const propertyResponse = await fetch(`/properties/${propertyId}`);
       const propertyData = await propertyResponse.json();
