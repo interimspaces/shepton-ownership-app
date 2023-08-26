@@ -94,3 +94,29 @@ app.use(errorHandler);
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+// SVG admin
+app.post('/api/saveSVGIds', async (req, res, next) => {
+  const { svgIds } = req.body; // Array of SVG element IDs
+  
+  try {
+      // Insert IDs into the database
+      await pool.query(
+          'INSERT INTO SVGElements (element_id) VALUES ($1) ON CONFLICT (element_id) DO NOTHING', 
+          [svgIds]
+      );
+      res.status(201).send('SVG IDs saved successfully.');
+  } catch (err) {
+      next(err);
+  }
+});
+
+app.get('/api/getSVGIds', async (req, res, next) => {
+  try {
+      const { rows } = await pool.query('SELECT element_id FROM SVGElements');
+      res.status(200).json(rows);
+  } catch (err) {
+      next(err);
+  }
+});
+
