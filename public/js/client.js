@@ -67,61 +67,61 @@ window.addEventListener('DOMContentLoaded', async () => {
   window.addEventListener('mouseup', () => {
     isDragging = false;
   });
+
+  // Fetch SVG and add event listeners
+  const response = await fetch('./data/buildings.svg');
+  if (!response.ok) {
+    console.error(`Error fetching the SVG: ${response.status}, ${response.statusText}`);
+    return;
+  }
+  const svgText = await response.text();
+  const tempContainer = document.createElement('div');
+  tempContainer.innerHTML = svgText;
+  const svgElement = tempContainer.querySelector('svg');
   
-  const fetchSVG = async () => {
-    const response = await fetch('./data/buildings.svg');
-    if (!response.ok) {
-      console.error(`Error fetching the SVG: ${response.status}, ${response.statusText}`);
-      return;
+  const propertyDataResponse = await fetch('/properties');
+  const allProperties = await propertyDataResponse.json();
+  
+  svgElement.querySelectorAll('polygon').forEach((polygon) => {
+    polygon.classList.add('building-object');
+    
+    const correspondingProperty = allProperties.find((property) => property.SVGID === polygon.id);
+    if (correspondingProperty) {
+      polygon.dataset.propertyId = correspondingProperty.PropertyID;
     }
-
-    const svgText = await response.text();
-    const tempContainer = document.createElement('div');
-    tempContainer.innerHTML = svgText;
-    const svgElement = tempContainer.querySelector('svg');
-
-    const propertyDataResponse = await fetch('/properties');
-    const allProperties = await propertyDataResponse.json();
-
-    svgElement.querySelectorAll('polygon').forEach((polygon) => {
-      const correspondingProperty = allProperties.find((property) => property.SVGID === polygon.id);
-      if (correspondingProperty) {
-        polygon.dataset.propertyId = correspondingProperty.PropertyID;
+    
+    polygon.addEventListener('click', async (e) => {
+      if (activePolygon) {
+        activePolygon.classList.remove('active');
       }
 
-      polygon.addEventListener('click', async (e) => {
-        if (activePolygon) {
-          activePolygon.classList.remove('active');
-        }
-        
-        activePolygon = e.target;
-        activePolygon.classList.add('active');
+      activePolygon = e.target;
+      activePolygon.classList.add('active');
 
-        const propertyId = activePolygon.dataset.propertyId;
-        if (!propertyId) return;
+      const propertyId = activePolygon.dataset.propertyId;
+      if (!propertyId) return;
 
-        const propertyResponse = await fetch(`/properties/${propertyId}`);
-        const propertyData = await propertyResponse.json();
-
-        fields.forEach((field) => {
-          const key = field.getAttribute('data-key');
-          field.value = propertyData[key] || '';
-          field.disabled = true;
-        });
-
-        editButton.disabled = false;
-        saveButton.disabled = true;
+      const propertyResponse = await fetch(`/properties/${propertyId}`);
+      const propertyData = await propertyResponse.json();
+      
+      fields.forEach((field) => {
+        const key = field.getAttribute('data-key');
+        field.value = propertyData[key] || '';
+        field.disabled = true;
       });
+
+      editButton.disabled = false;
+      saveButton.disabled = true;
     });
+  });
 
-    mapContainer.appendChild(svgElement);
-  };
-
-  await fetchSVG();
+  mapContainer.appendChild(svgElement);
 
   // Edit and Save functionalities
   editButton.addEventListener('click', () => {
-    fields.forEach((field) => field.disabled = false);
+    fields.forEach((field) => {
+      field.disabled = false;
+    });
     editButton.disabled = true;
     saveButton.disabled = false;
   });
@@ -144,7 +144,9 @@ window.addEventListener('DOMContentLoaded', async () => {
     const result = await response.json();
     console.log(result.message);
 
-    fields.forEach((field) => field.disabled = true);
+    fields.forEach((field) => {
+      field.disabled = true;
+    });
     editButton.disabled = false;
     saveButton.disabled = true;
   });
