@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 // GET All Properties
 app.get('/properties', async (req, res, next) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM PropertyTable'); // SQL query to get all properties
+    const { rows } = await pool.query('SELECT * FROM PropertyTable');
     res.status(200).json(rows);
   } catch (err) {
     next(err);
@@ -38,20 +38,18 @@ app.get('/properties', async (req, res, next) => {
 app.get('/properties/:id', async (req, res, next) => {
   const id = parseInt(req.params.id);
   try {
-    const { rows } = await pool.query('SELECT * FROM PropertyTable WHERE PropertyID = $1', [id]); // SQL query to get a single property
+    const { rows } = await pool.query('SELECT * FROM PropertyTable WHERE PropertyID = $1', [id]);
     res.status(200).json(rows[0]);
   } catch (err) {
     next(err);
   }
 });
-  
+
 // PUT Update Property
 app.put('/properties/:id', async (req, res, next) => {
   const id = parseInt(req.params.id);
   const propertyData = req.body;
-
-  const updateQuery = 'UPDATE PropertyTable SET ... WHERE PropertyID = $1'; // Replace with actual SQL update query
-
+  const updateQuery = 'UPDATE PropertyTable SET propertysvgid = $1, propertynumber = $2, propertyname = $3, propertystreet = $4, propertytown = $5, propertypostcode = $6, propertywardlocation = $7, propertytype = $8, propertycategory = $9, propertytenant = $10, propertyoccupationstatus = $11, propertylistedstatus = $12, propertyconservationzone = $13, propertynotes = $14, propertypurchasedate = $15, propertypurchaseamount = $16 WHERE PropertyID = $17';
   try {
     await pool.query(updateQuery, Object.values(propertyData).concat(id));
     res.status(200).send('Property updated successfully.');
@@ -63,9 +61,7 @@ app.put('/properties/:id', async (req, res, next) => {
 // POST Add New Owner
 app.post('/owners', async (req, res, next) => {
   const ownerData = req.body;
-
-  const insertQuery = 'INSERT INTO OwnershipTable (...) VALUES (...)'; // Replace with actual SQL insert query
-
+  const insertQuery = 'INSERT INTO OwnershipTable (field1, field2, field3) VALUES ($1, $2, $3)';
   try {
     await pool.query(insertQuery, Object.values(ownerData));
     res.status(201).send('Ownership added successfully.');
@@ -77,8 +73,7 @@ app.post('/owners', async (req, res, next) => {
 // DELETE Ownership History
 app.delete('/owners/:id', async (req, res, next) => {
   const id = parseInt(req.params.id);
-  const deleteQuery = 'DELETE FROM OwnershipTable WHERE OwnerID = $1'; // SQL query to delete an ownership record
-  
+  const deleteQuery = 'DELETE FROM OwnershipTable WHERE OwnerID = $1';
   try {
     await pool.query(deleteQuery, [id]);
     res.status(200).send('Ownership history deleted successfully.');
@@ -87,24 +82,11 @@ app.delete('/owners/:id', async (req, res, next) => {
   }
 });
 
-// Use the error handler middleware
-app.use(errorHandler);
-
-// Start the Server
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
-
 // SVG admin
 app.post('/api/saveSVGIds', async (req, res, next) => {
   const { svgIds } = req.body; // Array of SVG element IDs
-  
   try {
-      // Insert IDs into the database
-      await pool.query(
-          'INSERT INTO SVGElements (element_id) VALUES ($1) ON CONFLICT (element_id) DO NOTHING', 
-          [svgIds]
-      );
+      await pool.query('INSERT INTO SVGElements (element_id) VALUES ($1) ON CONFLICT (element_id) DO NOTHING', [svgIds]);
       res.status(201).send('SVG IDs saved successfully.');
   } catch (err) {
       next(err);
@@ -120,3 +102,10 @@ app.get('/api/getSVGIds', async (req, res, next) => {
   }
 });
 
+// Use the error handler middleware
+app.use(errorHandler);
+
+// Start the Server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
