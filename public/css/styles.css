@@ -1,18 +1,19 @@
+/* Reset and Typography */
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
     font-family: 'Roboto', sans-serif;
-
 }
 
+/* Layout Container */
 .layout {
     display: flex;
     height: 100%;
     background-color: #f5f5f5; /* Light gray background */
-
 }
 
+/* Map Container */
 .map-container {
     flex: 3;
     position: relative;
@@ -21,6 +22,7 @@ body, html {
     border-right: 1px solid #ddd; 
 }
 
+/* Zooming Area */
 .zooming-area {
     position: absolute;
     width: 100%;
@@ -35,11 +37,13 @@ body, html {
     cursor: grabbing;
 }
 
+/* Background Map */
 .background-map {
     width: 100%;
     display: block;
 }
 
+/* Building Objects */
 .building-objects {
     position: absolute;
     width: 100%;
@@ -49,6 +53,7 @@ body, html {
     z-index: 2;
 }
 
+/* Timeline */
 #timeline {
     position: absolute;
     top: 10px;
@@ -58,6 +63,7 @@ body, html {
     padding: 10px;
 }
 
+/* Sidebar */
 .sidebar {
     flex: 1;
     background-color: #f1f1f1;
@@ -65,6 +71,7 @@ body, html {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow */
 }
 
+/* Toolbar, Property Details, and Ownership Details */
 .toolbar,
 .property-details,
 .ownership-details {
@@ -72,11 +79,13 @@ body, html {
     border-bottom: 1px solid #ccc;
 }
 
+/* Buttons in Property and Ownership Details */
 .property-details button,
 .ownership-details button {
     margin-right: 10px;
 }
 
+/* Zoom Controls */
 .zoom-controls {
     position: absolute;
     bottom: 40px;
@@ -86,6 +95,7 @@ body, html {
     flex-direction: column;
 }
 
+/* Building Objects */
 .building-object {
     fill: #999999;
     transition: all 0.3s;
@@ -103,17 +113,22 @@ body, html {
     filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
 }
 
+/* Input Fields in Property and Ownership Details */
 .property-details input,
 .ownership-details input {
     display: block;
     width: 100%;
+    padding: 5px;
     margin-bottom: 10px;
-    margin-top: 20px;
+    box-sizing: border-box; /* Include padding in the width calculation */
 }
 
+/* Checkbox Layout in Toolbar */
 .toolbar label {
-    display: block;
-    margin-bottom: 5px;
+    display: inline-block;
+    width: 120px; /* Adjust as needed */
+    text-align: right;
+    margin-right: 10px;
 }
 
 .toolbar input[type="checkbox"] {
