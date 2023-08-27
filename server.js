@@ -12,7 +12,11 @@ const connectionString = "postgres://kcavgsmupzkxzi:72f1c5875dc878c63ece38475e7b
 
 const pool = new Pool({
   connectionString: connectionString,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
+
 
 pool.connect((err, client, done) => {
   if (err) return console.error(err);
