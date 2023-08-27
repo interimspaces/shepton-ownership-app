@@ -17,6 +17,17 @@ const pool = new Pool({
   }
 });
 
+// Function to assign permanent IDs to polygons
+const assignPermanentIDs = async () => {
+  try {
+    const { rowCount } = await pool.query('SELECT * FROM PropertyTable');
+    console.log(`Total records in PropertyTable: ${rowCount}`);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+assignPermanentIDs();
 
 pool.connect((err, client, done) => {
   if (err) return console.error(err);
