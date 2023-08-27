@@ -117,7 +117,7 @@ body, html {
 .property-details input,
 .ownership-details input {
     display: inline-block;
-    width: 100%;
+    width: 200px%;
     padding: 5px;
     margin-bottom: 10px;
     box-sizing: border-box; /* Include padding in the width calculation */
@@ -127,7 +127,7 @@ body, html {
 .toolbar label {
     display: inline-block;
     width: 120px; /* Adjust as needed */
-    text-align: right;
+    text-align: left;
     margin-right: 10px;
 }
 
