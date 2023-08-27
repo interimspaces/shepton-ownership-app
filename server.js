@@ -2,13 +2,14 @@
 const express = require('express');
 const path = require('path');
 const { Pool } = require('pg');
+const { generatePolygonID } = require('./database'); // Import the new function
 
 // Initialisation
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Hardcoded connection string as a workaround
-const connectionString = "postgres://kcavgsmupzkxzi:72f1c5875dc878c63ece38475e7b345d9aa531eea9e297c4a68a71a68d8e141f@ec2-44-215-40-87.compute-1.amazonaws.com:5432/dao96376jl1cte";
+const connectionString = 'postgres://kcavgsmupzkxzi:72f1c5875dc878c63ece38475e7b345d9aa531eea9e297c4a68a71a68d8e141f@ec2-44-215-40-87.compute-1.amazonaws.com:5432/dao96376jl1cte';
 
 const pool = new Pool({
   connectionString: connectionString,
@@ -17,17 +18,7 @@ const pool = new Pool({
   }
 });
 
-// Function to assign permanent IDs to polygons
-const assignPermanentIDs = async () => {
-  try {
-    const { rowCount } = await pool.query('SELECT * FROM PropertyTable');
-    console.log(`Total records in PropertyTable: ${rowCount}`);
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-assignPermanentIDs();
+// Function to assign permanent IDs to polygons (removed)
 
 pool.connect((err, client, done) => {
   if (err) return console.error(err);
@@ -52,63 +43,24 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// GET All Properties
-app.get('/properties', async (req, res, next) => {
+// GET All Polygons
+app.get('/polygons', async (req, res, next) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM PropertyTable');
-    res.status(200).json(rows);
+    const { rows } = await pool.query('SELECT * FROM svgelements');
+    const updatedRows = rows.map(row => {
+      if (!row.svg_id) {
+        row.svg_id = generatePolygonID();
+        // Update database here
+      }
+      return row;
+    });
+    res.status(200).json(updatedRows);
   } catch (err) {
     next(err);
   }
 });
 
-// GET Single Property by ID
-app.get('/properties/:id', async (req, res, next) => {
-  const id = parseInt(req.params.id);
-  try {
-    const { rows } = await pool.query('SELECT * FROM PropertyTable WHERE PropertyID = $1', [id]);
-    res.status(200).json(rows[0]);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// PUT Update Property
-app.put('/properties/:id', async (req, res, next) => {
-  const id = parseInt(req.params.id);
-  const propertyData = req.body;
-  const updateQuery = 'UPDATE PropertyTable SET propertysvgid = $1, propertynumber = $2, propertyname = $3, propertystreet = $4, propertytown = $5, propertypostcode = $6, propertywardlocation = $7, propertytype = $8, propertycategory = $9, propertytenant = $10, propertyoccupationstatus = $11, propertylistedstatus = $12, propertyconservationzone = $13, propertynotes = $14, propertypurchasedate = $15, propertypurchaseamount = $16 WHERE PropertyID = $17';
-  try {
-    await pool.query(updateQuery, Object.values(propertyData).concat(id));
-    res.status(200).send('Property updated successfully.');
-  } catch (err) {
-    next(err);
-  }
-});
-
-// POST Add New Owner
-app.post('/owners', async (req, res, next) => {
-  const ownerData = req.body;
-  const insertQuery = 'INSERT INTO OwnershipTable (field1, field2, field3) VALUES ($1, $2, $3)';
-  try {
-    await pool.query(insertQuery, Object.values(ownerData));
-    res.status(201).send('Ownership added successfully.');
-  } catch (err) {
-    next(err);
-  }
-});
-
-// DELETE Ownership History
-app.delete('/owners/:id', async (req, res, next) => {
-  const id = parseInt(req.params.id);
-  const deleteQuery = 'YOUR SQL DELETE QUERY HERE'; // Initialize the const variable
-  try {
-    await pool.query(deleteQuery, [id]);
-    res.status(200).send('Ownership deleted successfully.');
-  } catch (err) {
-    next(err);
-  }
-});
+// Existing routes...
 
 // Start the server
 app.listen(port, () => {
