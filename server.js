@@ -31,6 +31,7 @@ const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal Server Error' });
 };
+
 // Main Page Route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -69,6 +70,7 @@ app.put('/properties/:id', async (req, res, next) => {
     next(err);
   }
 });
+
 // POST Add New Owner
 app.post('/owners', async (req, res, next) => {
   const ownerData = req.body;
@@ -84,4 +86,16 @@ app.post('/owners', async (req, res, next) => {
 // DELETE Ownership History
 app.delete('/owners/:id', async (req, res, next) => {
   const id = parseInt(req.params.id);
-  const deleteQuery
+  const deleteQuery = 'YOUR SQL DELETE QUERY HERE'; // Initialize the const variable
+  try {
+    await pool.query(deleteQuery, [id]);
+    res.status(200).send('Ownership deleted successfully.');
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
