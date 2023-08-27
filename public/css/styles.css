@@ -3,7 +3,6 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: 'Roboto', sans-serif;
 }
 
 /* Layout Container */
@@ -121,6 +120,7 @@ body, html {
     padding: 5px;
     margin-bottom: 10px;
     box-sizing: border-box; /* Include padding in the width calculation */
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 /* Checkbox Layout in Toolbar */
