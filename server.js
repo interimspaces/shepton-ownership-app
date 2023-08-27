@@ -1,11 +1,24 @@
 // Required Modules
 const express = require('express');
 const path = require('path');
-const pool = require('./database');
+const { Pool } = require('pg');
 
 // Initialisation
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Hardcoded connection string as a workaround
+const connectionString = "postgres://USERNAME:PASSWORD@HOST:PORT/DATABASE";
+
+const pool = new Pool({
+  connectionString: connectionString,
+});
+
+pool.connect((err, client, done) => {
+  if (err) return console.error(err);
+  console.log('Connected to PostgreSQL');
+  done();
+});
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -18,7 +31,6 @@ const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal Server Error' });
 };
-
 // Main Page Route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -57,7 +69,6 @@ app.put('/properties/:id', async (req, res, next) => {
     next(err);
   }
 });
-
 // POST Add New Owner
 app.post('/owners', async (req, res, next) => {
   const ownerData = req.body;
@@ -73,39 +84,4 @@ app.post('/owners', async (req, res, next) => {
 // DELETE Ownership History
 app.delete('/owners/:id', async (req, res, next) => {
   const id = parseInt(req.params.id);
-  const deleteQuery = 'DELETE FROM OwnershipTable WHERE OwnerID = $1';
-  try {
-    await pool.query(deleteQuery, [id]);
-    res.status(200).send('Ownership history deleted successfully.');
-  } catch (err) {
-    next(err);
-  }
-});
-
-// SVG admin
-app.post('/api/saveSVGIds', async (req, res, next) => {
-  const { svgIds } = req.body; // Array of SVG element IDs
-  try {
-      await pool.query('INSERT INTO SVGElements (element_id) VALUES ($1) ON CONFLICT (element_id) DO NOTHING', [svgIds]);
-      res.status(201).send('SVG IDs saved successfully.');
-  } catch (err) {
-      next(err);
-  }
-});
-
-app.get('/api/getSVGIds', async (req, res, next) => {
-  try {
-      const { rows } = await pool.query('SELECT element_id FROM SVGElements');
-      res.status(200).json(rows);
-  } catch (err) {
-      next(err);
-  }
-});
-
-// Use the error handler middleware
-app.use(errorHandler);
-
-// Start the Server
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+  const deleteQuery
