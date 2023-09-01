@@ -1,68 +1,64 @@
-// Required Modules
 const express = require('express');
-const path = require('path');
-const { Pool } = require('pg');
-const { generatePolygonID } = require('./database'); // Import the new function
+const axios = require('axios');
 
-// Initialisation
+// Initialize Express app
 const app = express();
-const port = process.env.PORT || 3000;
 
-// Hardcoded connection string as a workaround
-const connectionString = 'postgres://kcavgsmupzkxzi:72f1c5875dc878c63ece38475e7b345d9aa531eea9e297c4a68a71a68d8e141f@ec2-44-215-40-87.compute-1.amazonaws.com:5432/dao96376jl1cte';
-
-const pool = new Pool({
-  connectionString: connectionString,
-  ssl: {
-    rejectUnauthorized: false
+// FileMaker API Configurations for different layouts
+const apiProperties = axios.create({
+  baseURL: 'http://127.0.0.1/fmi/data/v1/databases/shepton-ownership1/layouts/API_Properties',
+  auth: {
+    username: 'Admin',
+    password: 'R6[hjhnm',
   }
 });
 
-// Function to assign permanent IDs to polygons (removed)
-
-pool.connect((err, client, done) => {
-  if (err) return console.error(err);
-  console.log('Connected to PostgreSQL');
-  done();
+const apiOwnership = axios.create({
+  baseURL: 'http://127.0.0.1/fmi/data/v1/databases/shepton-ownership1/layouts/API_Ownership',
+  auth: {
+    username: 'Admin',
+    password: 'R6[hjhnm',
+  }
 });
 
-// Serve static files from the public directory
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Middleware for parsing JSON data
-app.use(express.json());
-
-// Error handling middleware function
-const errorHandler = (err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Internal Server Error' });
-};
-
-// Main Page Route
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+const apiPolygons = axios.create({
+  baseURL: 'http://127.0.0.1/fmi/data/v1/databases/shepton-ownership1/layouts/API_Polygons',
+  auth: {
+    username: 'Admin',
+    password: 'R6[hjhnm',
+  }
 });
 
-// GET All Polygons
-app.get('/polygons', async (req, res, next) => {
+// Sample API endpoints
+app.get('/properties', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM svgelements');
-    const updatedRows = rows.map(row => {
-      if (!row.svg_id) {
-        row.svg_id = generatePolygonID();
-        // Update database here
-      }
-      return row;
-    });
-    res.status(200).json(updatedRows);
-  } catch (err) {
-    next(err);
+    const response = await apiProperties.get('/records');
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Existing routes...
+app.get('/ownership', async (req, res) => {
+  try {
+    const response = await apiOwnership.get('/records');
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/polygons', async (req, res) => {
+  try {
+    const response = await apiPolygons.get('/records');
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
